@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class TempatTagModel extends Model
 {
     protected $table            = 'tempat_tags';
-    protected $primaryKey       = ''; // No single primary key
+    protected $primaryKey       = 'tempat_id';
     protected $useAutoIncrement = false;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;

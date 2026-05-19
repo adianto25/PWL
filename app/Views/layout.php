@@ -8,7 +8,7 @@ $hlm = isset($title) ? $title : "Beranda";
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Kuliner - <?= esc($hlm) ?></title>
+  <title>UMKM - <?= esc($hlm) ?></title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -31,6 +31,56 @@ $hlm = isset($title) ? $title : "Beranda";
 
   <!-- Template Main CSS File -->
   <link href="<?= base_url() ?>NiceAdmin/assets/css/style.css" rel="stylesheet">
+
+  <style>
+    /* Global UMKM LOKAL Styling - Premium Backend */
+    body {
+        background-color: #F8F9FA !important;
+        font-family: 'Poppins', sans-serif !important;
+    }
+    .sidebar {
+        background-color: #ffffff;
+        box-shadow: 2px 0 25px rgba(0,0,0,0.03) !important;
+        border-right: 1px solid rgba(0,0,0,0.02);
+    }
+    .sidebar-nav .nav-link {
+        background: transparent !important;
+        color: #6c757d !important;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        padding: 12px 15px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    .sidebar-nav .nav-link i {
+        color: #adb5bd !important;
+        margin-right: 15px;
+        font-size: 1.2rem;
+    }
+    .sidebar-nav .nav-link:hover {
+        background: #f0f4f2 !important;
+        color: #115934 !important;
+    }
+    .sidebar-nav .nav-link:hover i {
+        color: #115934 !important;
+    }
+    .sidebar-nav .nav-link:not(.collapsed) {
+        background: #eef5f0 !important;
+        color: #115934 !important;
+        font-weight: 600;
+        box-shadow: inset 3px 0 0 #115934;
+    }
+    .sidebar-nav .nav-link:not(.collapsed) i {
+        color: #115934 !important;
+    }
+    .main-card {
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        border: none;
+        background: #fff;
+        padding: 30px;
+    }
+  </style>
 
   <!-- =======================================================
   * Template Name: NiceAdmin

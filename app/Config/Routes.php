@@ -57,6 +57,9 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
 
     // Moderasi Review
     $routes->get('review/delete/(:num)', 'AdminController::reviewDelete/$1');
+
+    // Pengelolaan Foto
+    $routes->get('foto/delete/(:num)', 'AdminController::fotoDelete/$1');
 });
 
 // Webservice API

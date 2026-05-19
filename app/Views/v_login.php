@@ -13,81 +13,163 @@ $password = [
     'class' => 'form-control'
 ];
 ?>
-<section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+<style>
+    .login-section {
+        background: url('<?= base_url('NiceAdmin/assets/img/wallpaper (1).jpg') ?>') no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .login-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(135deg, rgba(4,37,9,0.8) 0%, rgba(9,66,23,0.9) 100%);
+        z-index: 1;
+    }
 
-              <div class="d-flex justify-content-center py-4">
-                <a href="<?= base_url('/') ?>" class="logo d-flex align-items-center w-auto">
-                <img src="<?php echo base_url() ?>NiceAdmin/assets/img/logo.png" alt="">
-                <span class="d-none d-lg-block">Toko & Kuliner</span>
-                </a>
-              </div><!-- End Logo -->
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255,255,255,0.5);
+        overflow: hidden;
+        z-index: 2;
+        width: 100%;
+        max-width: 450px;
+        padding: 40px;
+        animation: fadeIn 0.8s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-              <div class="card mb-3">
+    .login-logo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .login-logo img {
+        width: 60px;
+        margin-bottom: 15px;
+    }
+    .login-logo h3 {
+        font-weight: 800;
+        color: #165F39;
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: -0.5px;
+    }
+    .login-logo p {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
 
-                <div class="card-body">
+    .custom-input {
+        border-radius: 12px;
+        padding: 12px 15px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s;
+        font-size: 1rem;
+        height: auto;
+    }
+    .custom-input:focus {
+        background: #fff;
+        border-color: #165F39;
+        box-shadow: 0 0 0 4px rgba(22, 95, 57, 0.1);
+    }
+    
+    .login-btn {
+        background: linear-gradient(135deg, #518F5C 0%, #165F39 100%);
+        border: none;
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 1rem;
+        box-shadow: 0 8px 20px rgba(22, 95, 57, 0.25);
+        transition: all 0.3s;
+    }
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(22, 95, 57, 0.35);
+        background: linear-gradient(135deg, #165F39 0%, #094217 100%);
+    }
 
-                  <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Login ke Akun Anda</h5>
-                    <p class="text-center small">Masukkan username & password</p>
-                  </div>
+    .back-home {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        z-index: 10;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.3s;
+    }
+    .back-home:hover {
+        color: #D4AF37;
+    }
+</style>
 
-                  <?php
-                if (session()->getFlashData('failed')) {
-                ?>
-                  <div class="col-12 alert alert-danger" role="alert">
-                <hr>
-               <p class="mb-0">
-              <?= session()->getFlashData('failed') ?>
-           </p>
+<section class="login-section">
+    <div class="login-overlay"></div>
+    
+    <a href="<?= base_url('/') ?>" class="back-home">
+        <i class="bi bi-arrow-left"></i> Kembali ke Beranda
+    </a>
+
+    <div class="login-card">
+        <div class="login-logo">
+            <img src="<?= base_url() ?>NiceAdmin/assets/img/logo-umkm.png" alt="PrajaMukti Logo">
+            <h3 class="fs-4">PrajaMukti</h3>
+            <p>Silakan masuk untuk melanjutkan</p>
         </div>
-        <?php
-        }
-        ?>
-        <?php if (session()->getFlashData('success')): ?>
-            <div class="col-12 alert alert-success" role="alert">
-                <hr>
-                <p class="mb-0"><?= session()->getFlashData('success') ?></p>
+
+        <?php if (session()->getFlashData('failed')): ?>
+            <div class="alert alert-danger" style="border-radius: 12px; border:none; background:#fce8e6; color:#d93025; font-size:0.9rem;" role="alert">
+                <i class="bi bi-exclamation-circle me-2"></i> <?= session()->getFlashData('failed') ?>
             </div>
         <?php endif; ?>
         
-                 <?= form_open('login', 'class = "row g-3 needs-validation"') ?>
-
-<div class="col-12">
-    <label for="yourUsername" class="form-label">Username</label>
-    <div class="input-group has-validation">
-        <span class="input-group-text" id="inputGroupPrepend">@</span>
-        <?= form_input($username) ?>
-        <div class="invalid-feedback">Please enter your username.</div>
-    </div>
-</div>
-
-<div class="col-12">
-    <label for="yourPassword" class="form-label">Password</label>
-		    <?= form_password($password) ?>
-    <div class="invalid-feedback">Please enter your password!</div>
-</div>
-<div class="col-12">
-    <?= form_submit('submit', 'Login', ['class' => 'btn btn-primary w-100']) ?>
-</div>
-<div class="col-12 text-center mt-3">
-    <p class="small mb-0">Belum punya akun? <a href="<?= base_url('register') ?>">Daftar di sini</a></p>
-</div>
-
-<?= form_close() ?>
-
-                </div>
-              </div>
-
-              <div class="credits">
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-              </div>
-
+        <?php if (session()->getFlashData('success')): ?>
+            <div class="alert alert-success" style="border-radius: 12px; border:none; background:#e6f4ea; color:#188038; font-size:0.9rem;" role="alert">
+                <i class="bi bi-check-circle me-2"></i> <?= session()->getFlashData('success') ?>
             </div>
-          </div>
-        </div>
+        <?php endif; ?>
 
-      </section>
-      <?= $this->endSection() ?>
+        <?= form_open('login', 'class="needs-validation"') ?>
+            <div class="mb-4">
+                <label class="form-label fw-semibold" style="color: #495057; font-size: 0.9rem;">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px; color: #165F39; padding: 0 15px;"><i class="bi bi-person fs-5"></i></span>
+                    <input type="text" name="username" class="form-control custom-input border-start-0" style="border-radius: 0 12px 12px 0;" placeholder="Masukkan username" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold" style="color: #495057; font-size: 0.9rem;">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px; color: #165F39; padding: 0 15px;"><i class="bi bi-lock fs-5"></i></span>
+                    <input type="password" name="password" class="form-control custom-input border-start-0" style="border-radius: 0 12px 12px 0;" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 login-btn text-white mt-2">Login Sekarang</button>
+        <?= form_close() ?>
+
+        <div class="text-center mt-4">
+            <p class="small mb-0" style="color: #6c757d;">Belum punya akun? <a href="<?= base_url('register') ?>" style="color: #165F39; font-weight: 700; text-decoration: none;">Daftar di sini</a></p>
+        </div>
+    </div>
+</section>
+
+<?= $this->endSection() ?>

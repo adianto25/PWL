@@ -6,9 +6,9 @@
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
-                <a href="<?= base_url('/') ?>" class="logo d-flex align-items-center w-auto">
-                <img src="<?php echo base_url() ?>NiceAdmin/assets/img/logo.png" alt="">
-                <span class="d-none d-lg-block">Toko & Kuliner</span>
+                <a href="<?= base_url('/') ?>" class="logo d-flex align-items-center w-auto text-decoration-none">
+                <img src="<?php echo base_url() ?>NiceAdmin/assets/img/logo-umkm.png" alt="Logo PrajaMukti" style="max-height: 40px; margin-right: 10px;">
+                <span class="d-none d-lg-block fw-bold fs-4" style="color: #115934; letter-spacing: -1px;">PrajaMukti</span>
                 </a>
               </div><!-- End Logo -->
 

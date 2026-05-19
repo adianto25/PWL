@@ -91,7 +91,7 @@ class KulinerController extends BaseController
             'tempat' => $tempat,
             'kategori' => $this->kategoriModel->findAll(),
             'tags' => $tagModel->findAll(),
-            'pager' => $pager->makeLinks($page, $perPage, $totalRows, 'default_full')
+            'pager' => $pager->makeLinks($page, $perPage, $totalRows, 'custom_bootstrap')
         ];
 
         return view('v_kuliner_index', $data);

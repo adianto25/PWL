@@ -25,6 +25,7 @@ class AdminController extends BaseController
         $this->reviewModel = new ReviewModel();
         $this->kategoriModel = new KategoriModel();
         $this->tagModel = new TagModel();
+        $this->fotoModel = new \App\Models\TempatFotoModel();
     }
 
     public function index()
@@ -74,12 +75,34 @@ class AdminController extends BaseController
 
     public function kategoriAdd()
     {
+        $rules = [
+            'nama_kategori' => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Nama kategori harus diisi.']
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('error', $this->validator->getError('nama_kategori'));
+        }
+
         $this->kategoriModel->insert(['nama_kategori' => $this->request->getPost('nama_kategori')]);
         return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     public function kategoriEdit($id)
     {
+        $rules = [
+            'nama_kategori' => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Nama kategori harus diisi.']
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('error', $this->validator->getError('nama_kategori'));
+        }
+
         $this->kategoriModel->update($id, ['nama_kategori' => $this->request->getPost('nama_kategori')]);
         return redirect()->back()->with('success', 'Kategori berhasil diubah.');
     }
@@ -102,12 +125,34 @@ class AdminController extends BaseController
 
     public function tagAdd()
     {
+        $rules = [
+            'nama_tag' => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Nama tag harus diisi.']
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('error', $this->validator->getError('nama_tag'));
+        }
+
         $this->tagModel->insert(['nama_tag' => $this->request->getPost('nama_tag')]);
         return redirect()->back()->with('success', 'Tag berhasil ditambahkan.');
     }
 
     public function tagEdit($id)
     {
+        $rules = [
+            'nama_tag' => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Nama tag harus diisi.']
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('error', $this->validator->getError('nama_tag'));
+        }
+
         $this->tagModel->update($id, ['nama_tag' => $this->request->getPost('nama_tag')]);
         return redirect()->back()->with('success', 'Tag berhasil diubah.');
     }
@@ -128,11 +173,53 @@ class AdminController extends BaseController
             'selected_tags' => array_column((new \App\Models\TempatTagModel())->where('tempat_id', $id)->findAll(), 'tag_id')
         ];
         if(!$data['tempat']) return redirect()->to('/admin')->with('error', 'Data tidak ditemukan.');
+        
+        $data['fotos'] = $this->fotoModel->where('tempat_id', $id)->findAll();
+        
+        // Scan NiceAdmin assets for images
+        $assetPath = FCPATH . 'NiceAdmin/assets/img/';
+        $availableAssets = [];
+        if (is_dir($assetPath)) {
+            $files = scandir($assetPath);
+            foreach ($files as $file) {
+                if (in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png'])) {
+                    $availableAssets[] = $file;
+                }
+            }
+        }
+        $data['available_assets'] = $availableAssets;
+
         return view('admin/v_tempat_edit', $data);
     }
 
     public function tempatUpdate($id)
     {
+        $rules = [
+            'nama' => [
+                'rules' => 'required|min_length[3]',
+                'errors' => [
+                    'required' => 'Nama tempat harus diisi.',
+                    'min_length' => 'Nama tempat minimal 3 karakter.'
+                ]
+            ],
+            'alamat' => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Alamat harus diisi.']
+            ],
+            'kategori_id' => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Kategori harus dipilih.']
+            ],
+            'status' => [
+                'rules' => 'required|in_list[pending,approved,rejected]',
+                'errors' => ['required' => 'Status harus dipilih.', 'in_list' => 'Status tidak valid.']
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         $this->tempatModel->update($id, [
             'nama' => $this->request->getPost('nama'),
             'deskripsi' => $this->request->getPost('deskripsi'),
@@ -156,7 +243,65 @@ class AdminController extends BaseController
             }
         }
 
+        // --- Photo Management ---
+        $currentPhotoCount = $this->fotoModel->where('tempat_id', $id)->countAllResults();
+        
+        // 1. Process new file uploads
+        $files = $this->request->getFileMultiple('foto_upload');
+        if ($files) {
+            foreach ($files as $file) {
+                if ($currentPhotoCount >= 3) break;
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'uploads', $newName);
+
+                    try {
+                        \Config\Services::image()
+                            ->withFile(FCPATH . 'uploads/' . $newName)
+                            ->resize(800, 800, true, 'auto')
+                            ->save(FCPATH . 'uploads/' . $newName);
+                    } catch (\Exception $e) {}
+
+                    $this->fotoModel->insert([
+                        'tempat_id' => $id,
+                        'foto_path' => $newName
+                    ]);
+                    $currentPhotoCount++;
+                }
+            }
+        }
+
+        // 2. Process NiceAdmin Asset Selection
+        $fotoAsset = $this->request->getPost('foto_asset');
+        if (!empty($fotoAsset) && $currentPhotoCount < 3) {
+            $sourcePath = FCPATH . 'NiceAdmin/assets/img/' . $fotoAsset;
+            if (file_exists($sourcePath)) {
+                $this->fotoModel->insert([
+                    'tempat_id' => $id,
+                    'foto_path' => 'NiceAdmin/assets/img/' . $fotoAsset
+                ]);
+                $currentPhotoCount++;
+            }
+        }
+
         return redirect()->to('/admin')->with('success', 'Tempat kuliner berhasil diperbarui.');
+    }
+
+    public function fotoDelete($id)
+    {
+        $foto = $this->fotoModel->find($id);
+        if ($foto) {
+            // Jangan hapus file fisik jika itu dari template NiceAdmin
+            if (strpos($foto['foto_path'], 'NiceAdmin') === false) {
+                $filePath = FCPATH . 'uploads/' . $foto['foto_path'];
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+            $this->fotoModel->delete($id);
+            return redirect()->back()->with('success', 'Foto berhasil dihapus.');
+        }
+        return redirect()->back()->with('error', 'Foto tidak ditemukan.');
     }
 
     public function tempatDelete($id)

@@ -1,17 +1,17 @@
-﻿<!-- ======= Header ======= -->
+<!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="<?= base_url()?>NiceAdmin/assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">Nanang</span>
+      <a href="<?= base_url('/') ?>" class="logo d-flex align-items-center">
+        <img src="<?= base_url()?>NiceAdmin/assets/img/logo-umkm.png" alt="">
+        <span class="d-none d-lg-block">PrajaMukti</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
     <div class="search-bar">
       <form class="search-form d-flex align-items-center" method="GET" action="<?= base_url('/') ?>">
-        <input type="text" name="keyword" placeholder="Cari kuliner..." title="Cari nama atau alamat">
+        <input type="text" name="keyword" placeholder="Cari UMKM..." title="Cari nama atau alamat">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->

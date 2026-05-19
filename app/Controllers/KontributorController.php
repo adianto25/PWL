@@ -49,6 +49,41 @@ class KontributorController extends BaseController
 
     public function processSubmit()
     {
+        // Validasi input
+        $rules = [
+            'nama' => [
+                'rules' => 'required|min_length[3]',
+                'errors' => [
+                    'required' => 'Nama tempat/UMKM harus diisi.',
+                    'min_length' => 'Nama tempat minimal 3 karakter.'
+                ]
+            ],
+            'alamat' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Alamat harus diisi.'
+                ]
+            ],
+            'kategori_id' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Kategori harus dipilih.'
+                ]
+            ],
+            'fotos' => [
+                'rules' => 'max_size[fotos,2048]|ext_in[fotos,jpg,jpeg,png]|is_image[fotos]',
+                'errors' => [
+                    'max_size' => 'Ukuran salah satu foto lebih dari 2MB.',
+                    'ext_in' => 'Format foto harus berupa JPG, JPEG, atau PNG.',
+                    'is_image' => 'File yang diupload harus berupa gambar.'
+                ]
+            ]
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         $userId = session()->get('user_id');
         
         $dataInsert = [
@@ -107,33 +142,66 @@ class KontributorController extends BaseController
 
     public function geocode()
     {
-        $alamat = $this->request->getGet('q');
-        if (!$alamat) return $this->response->setJSON(['error' => 'Alamat kosong']);
+        $alamatInput = $this->request->getGet('q');
+        if (!$alamatInput) return $this->response->setJSON(['error' => 'Alamat kosong']);
 
-        $url = 'https://nominatim.openstreetmap.org/search?q=' . urlencode($alamat) . '&format=json&limit=1';
-        
+        // Clean common Indonesian prefixes that confuse Nominatim
+        $cleanAlamat = str_ireplace(['jl.', 'jalan', 'kec.', 'kecamatan', 'kab.', 'kabupaten', 'kota', 'provinsi'], '', $alamatInput);
+        $cleanAlamat = trim(preg_replace('/\s+/', ' ', $cleanAlamat));
+
+        // Split by comma
+        $parts = explode(',', $cleanAlamat);
+        $parts = array_map('trim', $parts);
+
         $client = \Config\Services::curlrequest([
             'headers' => [
                 'User-Agent' => 'KulinerKampusApp/1.0' // Nominatim requires User-Agent
             ]
         ]);
+
+        $queriesToTry = [];
         
-        try {
-            $response = $client->request('GET', $url);
-            $body = $response->getBody();
-            $data = json_decode($body, true);
-            
-            if (!empty($data)) {
-                return $this->response->setJSON([
-                    'lat' => $data[0]['lat'],
-                    'lon' => $data[0]['lon']
-                ]);
-            }
-        } catch (\Exception $e) {
-            return $this->response->setJSON(['error' => $e->getMessage()]);
+        // 1. Try exact input
+        $queriesToTry[] = $alamatInput;
+        
+        // 2. Try cleaned input
+        $queriesToTry[] = implode(', ', $parts);
+        
+        // 3. Progressive broader search (remove the first part repeatedly until 2 parts left)
+        // e.g. "Gondoriyo, Ngaliyan, Semarang" -> "Ngaliyan, Semarang" -> "Semarang"
+        $fallbackParts = $parts;
+        while(count($fallbackParts) > 1) {
+            array_shift($fallbackParts); // Remove the most specific part (street name, etc)
+            $queriesToTry[] = implode(', ', $fallbackParts);
         }
 
-        return $this->response->setJSON(['error' => 'Koordinat tidak ditemukan']);
+        // Remove duplicates to save API calls
+        $queriesToTry = array_unique($queriesToTry);
+
+        foreach ($queriesToTry as $q) {
+            if (empty(trim($q))) continue;
+            
+            $url = 'https://nominatim.openstreetmap.org/search?q=' . urlencode($q) . '&format=json&limit=1';
+            
+            try {
+                $response = $client->request('GET', $url);
+                $body = $response->getBody();
+                $data = json_decode($body, true);
+                
+                if (!empty($data) && isset($data[0]['lat'])) {
+                    return $this->response->setJSON([
+                        'lat' => $data[0]['lat'],
+                        'lon' => $data[0]['lon'],
+                        'matched_query' => $q
+                    ]);
+                }
+            } catch (\Exception $e) {
+                // If one request fails (e.g. timeout), try the next one
+                continue;
+            }
+        }
+
+        return $this->response->setJSON(['error' => 'Sistem otomatis kesulitan memetakan alamat ini secara presisi. Mohon KLIK PADA PETA untuk menandai lokasi.']);
     }
 
     public function postReview($tempatId)
