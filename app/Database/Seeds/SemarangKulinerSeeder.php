@@ -48,7 +48,7 @@ class SemarangKulinerSeeder extends Seeder
                 'nama' => 'Mie Kopyok Pak Dhuwur',
                 'alamat' => 'Jl. Tanjung No.18, Pandansari',
                 'deskripsi' => 'Kuliner merakyat berisi mie, lontong, dan tahu dengan kuah bawang putih yang segar.',
-                'kategori' => 'Makanan Berat', 'lat' => -6.97626, 'lng' => 110.41628, 'foto' => 'mie-kopyok.jpg'
+                'kategori' => 'Makanan Berat', 'lat' => -6.97626, 'lng' => 110.41628, 'foto' => 'mie_kopyok.jpeg'
             ],
             [
                 'nama' => 'Nasi Ayam Pak Supar',
