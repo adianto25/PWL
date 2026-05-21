@@ -131,10 +131,10 @@ class AdminController extends BaseController
             'kategori_id' => $this->request->getPost('id_kategori'),
             'alamat'      => $this->request->getPost('alamat'),
             'deskripsi'   => $this->request->getPost('deskripsi'),
-            'latitude'    => $this->request->getPost('lat'),
-            'longitude'   => $this->request->getPost('lng'),
+            'lat'         => $this->request->getPost('lat'),
+            'lng'         => $this->request->getPost('lng'),
             'status'      => 'pending',
-            'user_id'     => session()->get('id') ?? 1,
+            'user_id'     => session()->get('user_id') ?? 1,
             'created_at'  => date('Y-m-d H:i:s'),
             'updated_at'  => date('Y-m-d H:i:s'),
         ];
