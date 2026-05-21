@@ -60,6 +60,9 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
 
     // Pengelolaan Foto
     $routes->get('foto/delete/(:num)', 'AdminController::fotoDelete/$1');
+
+    $routes->get('tempat/add', 'AdminController::add_tempat'); // Menampilkan form
+    $routes->post('tempat/save', 'AdminController::save_tempat'); // Proses simpan data
 });
 
 // Webservice API

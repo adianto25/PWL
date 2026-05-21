@@ -128,6 +128,13 @@ class KontributorController extends BaseController
                         ->resize(800, 800, true, 'auto')
                         ->save(FCPATH . 'uploads/' . $newName);
 
+                    // Create Thumbnail (max 200px)
+                    $thumbName = 'thumb_' . $newName;
+                    \Config\Services::image()
+                        ->withFile(FCPATH . 'uploads/' . $newName)
+                        ->resize(200, 200, true, 'auto')
+                        ->save(FCPATH . 'uploads/' . $thumbName);
+
                     $this->fotoModel->insert([
                         'tempat_id' => $tempatId,
                         'foto_path' => $newName

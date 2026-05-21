@@ -146,8 +146,8 @@
         <!-- Main Image -->
         <?php 
             if (!empty($tempat['fotos']) && !empty($tempat['fotos'][0]['foto_path'])) {
-                $f_path = $tempat['fotos'][0]['foto_path'];
-                $imgSrc = (strpos($f_path, 'NiceAdmin') !== false) ? base_url($f_path) : base_url('uploads/'.$f_path);
+                $f_path = ltrim($tempat['fotos'][0]['foto_path'], '/');
+                $imgSrc = (strpos($f_path, 'NiceAdmin') !== false) ? base_url() . $f_path : base_url() . 'uploads/' . $f_path;
             } else {
                 $imgSrc = 'https://placehold.co/1200x500?text=Foto+UMKM';
             }

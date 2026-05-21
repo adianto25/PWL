@@ -70,19 +70,63 @@ $password = [
         font-size: 0.9rem;
     }
 
-    .custom-input {
-        border-radius: 12px;
-        padding: 12px 15px;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        transition: all 0.3s;
-        font-size: 1rem;
-        height: auto;
+    .kekinian-container {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        position: relative;
+        color: #333;
     }
-    .custom-input:focus {
-        background: #fff;
-        border-color: #165F39;
-        box-shadow: 0 0 0 4px rgba(22, 95, 57, 0.1);
+    
+    .kekinian-label {
+        font-size: 15px;
+        padding-left: 10px;
+        position: absolute;
+        top: 13px;
+        transition: 0.3s;
+        pointer-events: none;
+        color: #6c757d;
+    }
+    
+    .kekinian-input {
+        width: 100%;
+        height: 45px;
+        border: none;
+        outline: none;
+        padding: 0px 15px;
+        border-radius: 6px;
+        color: #333;
+        font-size: 15px;
+        background-color: transparent;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.1),
+        -1px -1px 6px rgba(255, 255, 255, 1);
+    }
+    
+    .kekinian-input:focus {
+        border: 2px solid transparent;
+        color: #333;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.1),
+        -1px -1px 6px rgba(255, 255, 255, 1),
+        inset 3px 3px 10px rgba(0,0,0,0.05),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.5);
+    }
+    
+    .kekinian-input:valid ~ .kekinian-label,
+    .kekinian-input:focus ~ .kekinian-label {
+        transition: 0.3s;
+        padding-left: 2px;
+        transform: translateY(-32px);
+        color: #165F39;
+        font-weight: 600;
+        font-size: 13px;
+    }
+    
+    .kekinian-input:valid,
+    .kekinian-input:focus {
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.1),
+        -1px -1px 6px rgba(255, 255, 255, 1),
+        inset 3px 3px 10px rgba(0,0,0,0.05),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.5);
     }
     
     .login-btn {
@@ -147,20 +191,14 @@ $password = [
         <?php endif; ?>
 
         <?= form_open('login', 'class="needs-validation"') ?>
-            <div class="mb-4">
-                <label class="form-label fw-semibold" style="color: #495057; font-size: 0.9rem;">Username</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px; color: #165F39; padding: 0 15px;"><i class="bi bi-person fs-5"></i></span>
-                    <input type="text" name="username" class="form-control custom-input border-start-0" style="border-radius: 0 12px 12px 0;" placeholder="Masukkan username" required>
-                </div>
+            <div class="kekinian-container mb-4">
+                <input required="" type="text" name="username" class="kekinian-input">
+                <label class="kekinian-label">Username</label>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold" style="color: #495057; font-size: 0.9rem;">Password</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px; color: #165F39; padding: 0 15px;"><i class="bi bi-lock fs-5"></i></span>
-                    <input type="password" name="password" class="form-control custom-input border-start-0" style="border-radius: 0 12px 12px 0;" placeholder="••••••••" required>
-                </div>
+            <div class="kekinian-container mb-4">
+                <input required="" type="password" name="password" class="kekinian-input">
+                <label class="kekinian-label">Password</label>
             </div>
 
             <button type="submit" class="btn btn-primary w-100 login-btn text-white mt-2">Login Sekarang</button>

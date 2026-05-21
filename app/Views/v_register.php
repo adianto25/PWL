@@ -30,19 +30,81 @@
 
                   <?= form_open('register', 'class = "row g-3 needs-validation"') ?>
 
-                  <div class="col-12">
-                      <label for="username" class="form-label">Username</label>
-                      <input type="text" name="username" class="form-control" id="username" required>
+                  <style>
+                  .kekinian-container {
+                      display: flex;
+                      flex-direction: column;
+                      gap: 7px;
+                      position: relative;
+                      color: #333;
+                      margin-bottom: 20px;
+                  }
+                  
+                  .kekinian-label {
+                      font-size: 15px;
+                      padding-left: 10px;
+                      position: absolute;
+                      top: 13px;
+                      transition: 0.3s;
+                      pointer-events: none;
+                      color: #6c757d;
+                  }
+                  
+                  .kekinian-input {
+                      width: 100%;
+                      height: 45px;
+                      border: none;
+                      outline: none;
+                      padding: 0px 15px;
+                      border-radius: 6px;
+                      color: #333;
+                      font-size: 15px;
+                      background-color: transparent;
+                      box-shadow: 3px 3px 10px rgba(0,0,0,0.1),
+                      -1px -1px 6px rgba(255, 255, 255, 1);
+                  }
+                  
+                  .kekinian-input:focus {
+                      border: 2px solid transparent;
+                      color: #333;
+                      box-shadow: 3px 3px 10px rgba(0,0,0,0.1),
+                      -1px -1px 6px rgba(255, 255, 255, 1),
+                      inset 3px 3px 10px rgba(0,0,0,0.05),
+                      inset -1px -1px 6px rgba(255, 255, 255, 0.5);
+                  }
+                  
+                  .kekinian-input:valid ~ .kekinian-label,
+                  .kekinian-input:focus ~ .kekinian-label {
+                      transition: 0.3s;
+                      padding-left: 2px;
+                      transform: translateY(-32px);
+                      color: #165F39;
+                      font-weight: 600;
+                      font-size: 13px;
+                  }
+                  
+                  .kekinian-input:valid,
+                  .kekinian-input:focus {
+                      box-shadow: 3px 3px 10px rgba(0,0,0,0.1),
+                      -1px -1px 6px rgba(255, 255, 255, 1),
+                      inset 3px 3px 10px rgba(0,0,0,0.05),
+                      inset -1px -1px 6px rgba(255, 255, 255, 0.5);
+                  }
+                  </style>
+
+                  <div class="col-12 kekinian-container mt-2">
+                      <input type="text" name="username" class="kekinian-input" required>
+                      <label class="kekinian-label">Username</label>
                   </div>
 
-                  <div class="col-12">
-                      <label for="password" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="password" required>
+                  <div class="col-12 kekinian-container">
+                      <input type="password" name="password" class="kekinian-input" required>
+                      <label class="kekinian-label">Kata Sandi</label>
                   </div>
 
-                  <div class="col-12">
-                      <label for="confirm_password" class="form-label">Konfirmasi Password</label>
-                      <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
+                  <div class="col-12 kekinian-container">
+                      <input type="password" name="confirm_password" class="kekinian-input" required>
+                      <label class="kekinian-label">Konfirmasi Kata Sandi</label>
                   </div>
 
                   <div class="col-12 mt-4">

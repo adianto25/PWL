@@ -122,7 +122,10 @@
                         <?php foreach($fotos as $f): ?>
                         <div class="col-md-4 col-sm-6">
                             <div class="photo-card shadow-sm">
-                                <?php $src = (strpos($f['foto_path'], 'NiceAdmin') !== false) ? base_url($f['foto_path']) : base_url('uploads/'.$f['foto_path']); ?>
+                                <?php 
+                                    $f_path = ltrim($f['foto_path'], '/');
+                                    $src = (strpos($f_path, 'NiceAdmin') !== false) ? base_url() . $f_path : base_url() . 'uploads/' . $f_path; 
+                                ?>
                                 <img src="<?= $src ?>" alt="Foto Tempat">
                                 <a href="<?= base_url('admin/foto/delete/'.$f['id']) ?>" class="btn-delete" onclick="return confirm('Hapus foto ini?')" title="Hapus Foto">
                                     <i class="bi bi-trash"></i>

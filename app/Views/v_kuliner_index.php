@@ -372,8 +372,8 @@
                 <a href="<?= base_url('kuliner/detail/'.$t['id']) ?>">
                     <?php 
                         if (!empty($t['foto_utama'])) {
-                            $f_path = $t['foto_utama'];
-                            $imgSrc = (strpos($f_path, 'NiceAdmin') !== false) ? base_url($f_path) : base_url('uploads/'.$f_path);
+                            $f_path = ltrim($t['foto_utama'], '/');
+                            $imgSrc = (strpos($f_path, 'NiceAdmin') !== false) ? base_url() . $f_path : base_url() . 'uploads/' . $f_path;
                         } else {
                             $imgSrc = 'https://placehold.co/800x600?text=Foto+Kuliner';
                         }

@@ -209,12 +209,18 @@
         font-size: 13px;
         cursor: pointer;
     }
+
+    /* Modal Form Custom Styles */
+    .modal-content { border-radius: 20px; border: none; }
+    .modal-header { border-bottom: 1px solid #eee; padding: 20px 30px; }
+    .modal-footer { border-top: none; padding: 20px 30px; }
+    .form-label { font-weight: 600; color: #444; font-size: 13px; text-transform: uppercase; }
+    .form-control, .form-select { border-radius: 10px; border: 1px solid #ddd; padding: 10px 15px; }
 </style>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 
-<!-- STAT CARDS -->
 <div class="row g-3 mb-4">
     <div class="col-md-3">
         <div class="stat-card">
@@ -263,25 +269,24 @@
 </div>
 
 <?php if (session()->getFlashData('success')): ?>
-    <div class="alert alert-success alert-dismissible fade show" style="border-radius: 10px;">
-        <?= session()->getFlashData('success') ?>
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" style="border-radius: 10px;">
+        <i class="bi bi-check-circle-fill me-2"></i> <?= session()->getFlashData('success') ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php endif; ?>
 
-<!-- MAIN LOCATION CARD -->
 <div class="main-card mt-2">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h3 class="fw-bold text-dark mb-1">Manajemen Lokasi</h3>
             <p class="text-muted small mb-0">Kelola semua daftar produk UMKM kamu di sini.</p>
         </div>
-        <a href="<?= base_url('admin/tempat/add') ?>" class="btn btn-warning fw-bold text-dark px-4 rounded-pill shadow-sm" style="background-color: #ffc107; border:none; height: 45px; display: flex; align-items: center;">
+        
+        <button type="button" class="btn btn-warning fw-bold text-dark px-4 rounded-pill shadow-sm" style="background-color: #ffc107; border:none; height: 45px;" data-bs-toggle="modal" data-bs-target="#modalTambahLokasi">
             <i class="bi bi-plus" style="font-size: 1.2rem;"></i> Tambah Lokasi Baru
-        </a>
+        </button>
     </div>
 
-    <!-- TOOLBAR -->
     <div class="toolbar">
         <div class="d-flex align-items-center">
             <i class="bi bi-search text-muted"></i>
@@ -298,7 +303,6 @@
         </div>
     </div>
 
-    <!-- TABLE -->
     <div class="table-responsive">
         <table class="table table-custom table-borderless">
             <thead>
@@ -318,7 +322,6 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <!-- Placeholder Image Generator to mimic the mockup's avatars -->
                                 <img src="https://ui-avatars.com/api/?name=<?= urlencode($t['nama']) ?>&background=random&color=fff&size=100&rounded=false&bold=true" class="avatar-lokasi" alt="<?= esc($t['nama']) ?>">
                                 <div>
                                     <div class="fw-bold text-dark" style="font-size: 15px;"><?= esc($t['nama']) ?></div>
@@ -361,6 +364,62 @@
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTambahLokasi" tabindex="-1" aria-labelledby="modalTambahLokasiLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="modalTambahLokasiLabel text-dark">Tambah Lokasi Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="<?= base_url('admin/tempat/save') ?>" method="POST" enctype="multipart/form-data">
+                <?= csrf_field() ?>
+                <div class="modal-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nama Lokasi</label>
+                            <input type="text" name="nama" class="form-control" placeholder="Nama UMKM..." required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Kategori</label>
+                            <select name="id_kategori" class="form-select" required>
+                                <option value="">Pilih Kategori</option>
+                                <?php foreach($kategori as $k): ?>
+                                    <option value="<?= $k['id'] ?>"><?= $k['nama_kategori'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Alamat Lengkap</label>
+                            <textarea name="alamat" class="form-control" rows="2" required placeholder="Jl. Raya..."></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Deskripsi</label>
+                            <textarea name="deskripsi" class="form-control" rows="3" placeholder="Ceritakan tentang tempat ini..."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Latitude</label>
+                            <input type="text" name="lat" class="form-control" placeholder="-6.12345">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Longitude</label>
+                            <input type="text" name="lng" class="form-control" placeholder="106.12345">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Foto Utama</label>
+                            <input type="file" name="foto" class="form-control" accept="image/*" required>
+                            <div class="form-text">Maksimal 2MB (JPG/PNG).</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light px-4 rounded-pill fw-bold" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning px-5 rounded-pill fw-bold text-dark shadow-sm">Simpan Lokasi</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
