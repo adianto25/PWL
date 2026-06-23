@@ -187,6 +187,25 @@ class SemarangKulinerSeeder extends Seeder
                 'tempat_id' => $tempatId,
                 'foto_path' => 'NiceAdmin/assets/img/' . $data['foto']
             ]);
+
+            // Assign Tags: Wajib Halal MUI (3) dan Bisa Bayar QRIS (9)
+            $tagsToInsert = [
+                ['tempat_id' => $tempatId, 'tag_id' => 3],
+                ['tempat_id' => $tempatId, 'tag_id' => 9],
+            ];
+
+            // Tambahkan 1 atau 2 tag acak lainnya agar bervariasi
+            $availableTags = [1, 2, 4, 5, 6, 7, 8];
+            shuffle($availableTags);
+            $randomCount = rand(1, 2);
+            for ($i = 0; $i < $randomCount; $i++) {
+                $tagsToInsert[] = [
+                    'tempat_id' => $tempatId,
+                    'tag_id' => $availableTags[$i]
+                ];
+            }
+
+            $this->db->table('tempat_tags')->insertBatch($tagsToInsert);
         }
     }
 }
