@@ -244,18 +244,19 @@ class KontributorController extends BaseController
     public function toggleFavorit($tempatId)
     {
         $userId = session()->get('user_id');
-        $favoritModel = new \App\Models\FavoritModel();
+        $db = \Config\Database::connect();
         
-        $exists = $favoritModel->where('user_id', $userId)->where('tempat_id', $tempatId)->first();
+        $exists = $db->table('favorit')->where('user_id', $userId)->where('tempat_id', $tempatId)->get()->getRowArray();
+        
         if ($exists) {
-            $favoritModel->where('user_id', $userId)->where('tempat_id', $tempatId)->delete();
-            return redirect()->back()->with('success', 'Dihapus dari favorit.');
+            $db->table('favorit')->where('user_id', $userId)->where('tempat_id', $tempatId)->delete();
+            return redirect()->to(base_url('kontributor/favorit'))->with('success', 'Dihapus dari daftar favorit Anda.');
         } else {
-            $favoritModel->insert([
+            $db->table('favorit')->insert([
                 'user_id' => $userId,
                 'tempat_id' => $tempatId
             ]);
-            return redirect()->back()->with('success', 'Ditambahkan ke favorit.');
+            return redirect()->to(base_url('kontributor/favorit'))->with('success', 'Berhasil ditambahkan ke Favorit Saya!');
         }
     }
 
