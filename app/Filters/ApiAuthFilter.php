@@ -10,7 +10,7 @@ class ApiAuthFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        $header = $request->getServer('HTTP_AUTHORIZATION');
+        $header = $request->getHeaderLine('Authorization');
         $validToken = 'Bearer prajamukti-api-key-2026';
 
         if (!$header || $header !== $validToken) {
