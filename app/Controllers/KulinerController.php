@@ -79,10 +79,25 @@ class KulinerController extends BaseController
         $queryBuilder->limit($perPage, ($page - 1) * $perPage);
         $tempat = $queryBuilder->get()->getResultArray();
 
-        // Fetch primary photo for each place
-        foreach ($tempat as &$t) {
-            $foto = $db->table('tempat_fotos')->where('tempat_id', $t['id'])->orderBy('id', 'ASC')->get()->getRowArray();
-            $t['foto_utama'] = $foto ? $foto['foto_path'] : null;
+        // Optimalisasi: Mengatasi N+1 Query dengan mengambil foto sekaligus
+        $tempatIds = array_column($tempat, 'id');
+        if (!empty($tempatIds)) {
+            $fotos = $db->table('tempat_fotos')
+                        ->whereIn('tempat_id', $tempatIds)
+                        ->orderBy('id', 'ASC')
+                        ->get()->getResultArray();
+            
+            $fotoMap = [];
+            foreach ($fotos as $f) {
+                // Simpan hanya foto pertama (id terkecil) sebagai foto utama
+                if (!isset($fotoMap[$f['tempat_id']])) {
+                    $fotoMap[$f['tempat_id']] = $f['foto_path'];
+                }
+            }
+
+            foreach ($tempat as &$t) {
+                $t['foto_utama'] = $fotoMap[$t['id']] ?? null;
+            }
         }
 
         $pager = \Config\Services::pager();
@@ -102,12 +117,11 @@ class KulinerController extends BaseController
     {
         $db = \Config\Database::connect();
         
-        $builder = $db->table('tempat_kuliner');
-        $builder->select('tempat_kuliner.*, kategori.nama_kategori, users.username, (SELECT IFNULL(AVG(rating),0) FROM reviews WHERE tempat_id = tempat_kuliner.id) as avg_rating');
-        $builder->join('kategori', 'kategori.id = tempat_kuliner.kategori_id');
-        $builder->join('users', 'users.id = tempat_kuliner.user_id');
-        $builder->where('tempat_kuliner.id', $id);
-        $tempat = $builder->get()->getRowArray();
+        // Optimalisasi: Standarisasi penggunaan Model alih-alih raw builder
+        $this->tempatModel->select('tempat_kuliner.*, kategori.nama_kategori, users.username, (SELECT IFNULL(AVG(rating),0) FROM reviews WHERE tempat_id = tempat_kuliner.id) as avg_rating');
+        $this->tempatModel->join('kategori', 'kategori.id = tempat_kuliner.kategori_id');
+        $this->tempatModel->join('users', 'users.id = tempat_kuliner.user_id');
+        $tempat = $this->tempatModel->find($id);
 
         if (!$tempat) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();

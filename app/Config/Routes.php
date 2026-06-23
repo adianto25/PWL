@@ -60,10 +60,11 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
 
     // Pengelolaan Foto
     $routes->get('foto/delete/(:num)', 'AdminController::fotoDelete/$1');
-});
 
-$routes->get('admin/tempat/add', 'AdminController::add_tempat'); // Menampilkan form
-$routes->post('admin/tempat/save', 'AdminController::save_tempat'); // Proses simpan data
+    // Menambah Tempat (Admin)
+    $routes->get('tempat/add', 'AdminController::add_tempat'); // Menampilkan form
+    $routes->post('tempat/save', 'AdminController::save_tempat'); // Proses simpan data
+});
 
 // Webservice API
 $routes->get('api/kuliner', 'Api\KulinerController::index');

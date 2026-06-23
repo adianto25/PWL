@@ -26,8 +26,8 @@ class AuthController extends BaseController
 
             // 2. Jalankan Validasi
             if ($this->validate($rules)) {
-                $username = $this->request->getVar('username');
-                $password = $this->request->getVar('password');
+                $username = $this->request->getPost('username');
+                $password = $this->request->getPost('password');
 
                 $dataUser = $this->userModel->where('username', $username)->first();
 
@@ -76,8 +76,8 @@ class AuthController extends BaseController
             ];
 
             if ($this->validate($rules)) {
-                $username = $this->request->getVar('username');
-                $password = $this->request->getVar('password');
+                $username = $this->request->getPost('username');
+                $password = $this->request->getPost('password');
 
                 $this->userModel->save([
                     'username'   => $username,

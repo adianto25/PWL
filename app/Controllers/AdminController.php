@@ -121,7 +121,7 @@ class AdminController extends BaseController
             'latitude'    => $this->request->getPost('lat'),
             'longitude'   => $this->request->getPost('lng'),
             'status'      => 'pending',
-            'user_id'     => session()->get('id') ?? 1,
+            'user_id'     => session()->get('user_id'),
             'created_at'  => date('Y-m-d H:i:s'),
             'updated_at'  => date('Y-m-d H:i:s'),
         ];
@@ -304,7 +304,15 @@ class AdminController extends BaseController
             'nama' => 'required|min_length[3]',
             'alamat' => 'required',
             'kategori_id' => 'required',
-            'status' => 'required|in_list[pending,approved,rejected]'
+            'status' => 'required|in_list[pending,approved,rejected]',
+            'foto_upload' => [
+                'rules' => 'max_size[foto_upload,2048]|ext_in[foto_upload,jpg,jpeg,png]|is_image[foto_upload]',
+                'errors' => [
+                    'max_size' => 'Ukuran foto maksimal adalah 2MB.',
+                    'is_image' => 'File yang diunggah harus berupa gambar.',
+                    'ext_in'   => 'Format gambar harus JPG, JPEG, atau PNG.'
+                ]
+            ]
         ];
 
         if (!$this->validate($rules)) {
