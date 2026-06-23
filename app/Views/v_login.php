@@ -82,7 +82,8 @@ $password_attr = [
       gap: 7px;
       position: relative;
       width: 100%;
-      margin-bottom: 25px;
+      margin-bottom: 38px;
+      margin-top: 5px;
     }
 
     .float-container .float-label {
@@ -152,6 +153,20 @@ $password_attr = [
         position: absolute; top: 30px; left: 30px; z-index: 10;
         color: white; text-decoration: none; font-weight: 600;
         display: flex; align-items: center; gap: 8px;
+    }
+
+    /* --- RESPONSIVE ADJUSTMENTS --- */
+    @media (max-width: 768px) {
+      .login-section { padding: 20px; }
+      .login-card { 
+          padding: 30px 20px; 
+          width: 100%;
+          border-radius: 20px;
+      }
+      .back-home {
+          top: 15px; left: 15px;
+          font-size: 0.9rem;
+      }
     }
 </style>
 

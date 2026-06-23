@@ -148,6 +148,15 @@
       color: #ffc107;
       transition: color 0.3s;
     }
+
+    /* --- RESPONSIVE ADJUSTMENTS --- */
+    @media (max-width: 768px) {
+        .detail-card { padding: 20px !important; }
+        .hero-img { height: 250px !important; margin-bottom: 20px; }
+        .review-summary-card { flex-direction: column; gap: 20px; text-align: center; padding: 20px; }
+        .badge-category { font-size: 12px; margin-bottom: 5px; padding: 6px 12px; }
+        .detail-card h1 { font-size: 1.8rem !important; }
+    }
 </style>
 <?= $this->endSection() ?>
 
@@ -187,8 +196,8 @@
         
         <!-- Detail Info -->
         <div class="detail-card">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-                <span class="badge-category"><?= esc($tempat['nama_kategori']) ?></span>
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                <span class="badge-category mb-0"><?= esc($tempat['nama_kategori']) ?></span>
                 <span class="text-muted small"><i class="bi bi-person-circle"></i> Ditambahkan oleh: <strong><?= esc($tempat['username']) ?></strong></span>
             </div>
             
@@ -282,7 +291,7 @@
                                 <?= strtoupper(substr(esc($r['username']), 0, 1)) ?>
                             </div>
                             <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-1 gap-1">
                                     <h6 class="fw-bold mb-0 text-dark"><?= esc($r['username']) ?></h6>
                                     <span class="text-muted small"><i class="bi bi-clock"></i> <?= date('d M Y', strtotime($r['created_at'])) ?></span>
                                 </div>

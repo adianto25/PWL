@@ -381,6 +381,27 @@
       padding: 0 8px;
       width: 2.8em;
     }
+
+    /* --- RESPONSIVE ADJUSTMENTS --- */
+    @media (max-width: 768px) {
+      .hero-section { min-height: 85vh !important; padding-top: 60px !important; }
+      .filter-card { padding: 15px !important; border-radius: 16px !important; }
+      
+      /* Make input-group stack cleanly on mobile */
+      .filter-card .input-group { flex-direction: column; width: 100%; }
+      .filter-card .input-group .form-control { 
+          border-radius: 12px !important; 
+          width: 100% !important; 
+          margin-bottom: 10px; 
+      }
+      .filter-btn { 
+          border-radius: 12px !important; 
+          width: 100%; 
+      }
+      
+      /* Adjust map size */
+      #mainMap { height: 350px !important; }
+    }
 </style>
 <?= $this->endSection() ?>
 

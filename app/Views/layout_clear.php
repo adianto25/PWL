@@ -54,6 +54,10 @@ if(uri_string()!=""){
       --gold-accent: #D4AF37; /* Premium Gold */
     }
     
+    html, body {
+        overflow-x: hidden; /* Mencegah munculnya scrollbar horizontal / white bar di HP */
+    }
+    
     body { 
         color: var(--zia-olive); 
         background-color: #FAFAFA;
@@ -175,6 +179,33 @@ if(uri_string()!=""){
       width: 0px;
       height: 0px;
     }
+
+    /* --- RESPONSIVE ADJUSTMENTS --- */
+    @media (max-width: 991px) {
+      .header-nav ul { gap: 15px !important; }
+      .header-nav .btn { padding: 6px 16px !important; font-size: 0.9rem; }
+    }
+    
+    @media (max-width: 768px) {
+      .header-nav ul { gap: 8px !important; }
+      .header-nav .nav-link { font-size: 0.85rem !important; padding: 0 4px !important; }
+      .header-nav .btn { padding: 5px 12px !important; font-size: 0.8rem; }
+      .logo img { max-height: 28px !important; margin-right: 5px !important; }
+      .logo span { font-size: 1.1rem !important; }
+      
+      /* Footer Adjustments */
+      footer { padding: 40px 0 20px !important; text-align: center; }
+      footer .d-flex { justify-content: center !important; }
+      footer .social-btn { margin: 0 5px; }
+      footer .border-top { margin-top: 20px !important; padding-top: 20px !important; }
+    }
+    
+    @media (max-width: 480px) {
+      .logo span { display: none !important; /* Keep only icon on very small screens to save space */ }
+      .header-nav .nav-link { font-size: 0.75rem !important; }
+      .header-nav .btn { font-size: 0.75rem !important; }
+      main { margin-top: 120px !important; } /* Cegah header menutupi konten jika menu turun ke baris baru */
+    }
   </style>
 </head>
 
@@ -211,10 +242,10 @@ if(uri_string()!=""){
 	</main><!-- End #main -->
 
     <!-- Footer -->
-    <footer style="background-color: #1a1a1a; color: #e0e0e0; padding: 60px 0 30px; font-size: 14px;">
+    <footer style="background-color: #1a1a1a; color: #e0e0e0; padding: 40px 0 20px; font-size: 14px;">
         <div class="container-fluid px-4 px-lg-5">
             <div class="row g-4">
-                <div class="col-lg-4 mb-4">
+                <div class="col-lg-4 mb-3">
                     <a href="<?= base_url('/') ?>" class="d-flex align-items-center text-decoration-none mb-3">
                         <img src="<?= base_url() ?>NiceAdmin/assets/img/logo-umkm.png" alt="Logo" style="max-height: 40px; margin-right: 10px;">
                         <span class="fw-bold fs-3 text-white" style="letter-spacing: -1px;">PrajaMukti</span>
@@ -231,18 +262,18 @@ if(uri_string()!=""){
                         <span style="color: #f8c146; font-weight: 600;">+62 8128 008 0275</span>
                     </p>
                 </div>
-                <div class="col-lg-2 mb-4">
-                    <h5 class="text-white fw-bold mb-4">Menu</h5>
-                    <ul class="list-unstyled" style="line-height: 2.2;">
+                <div class="col-lg-2 mb-3">
+                    <h5 class="text-white fw-bold mb-3">Menu</h5>
+                    <ul class="list-unstyled" style="line-height: 1.8;">
                         <li><a href="<?= base_url('/') ?>" class="text-decoration-none" style="color: #a0a0a0; transition: color 0.3s;">Beranda</a></li>
                         <li><a href="<?= base_url('/#kulinerSection') ?>" class="text-decoration-none" style="color: #a0a0a0; transition: color 0.3s;">UMKM</a></li>
                         <li><a href="<?= base_url('/#mapsSection') ?>" class="text-decoration-none" style="color: #a0a0a0; transition: color 0.3s;">Maps</a></li>
                         <li><a href="<?= base_url('login') ?>" class="text-decoration-none" style="color: #a0a0a0; transition: color 0.3s;">Login</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 mb-4">
-                    <h5 class="text-white fw-bold mb-4">Hubungi Kami</h5>
-                    <div class="d-flex gap-3 mt-3">
+                <div class="col-lg-3 mb-3">
+                    <h5 class="text-white fw-bold mb-3">Hubungi Kami</h5>
+                    <div class="d-flex gap-3 mt-2">
                         <a href="#" class="social-btn btn-ig">
                           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path clip-rule="evenodd" d="M3 8a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8Zm5-3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H8Zm7.597 2.214a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2h-.01a1 1 0 0 1-1-1ZM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-5 3a5 5 0 1 1 10 0 5 5 0 0 1-10 0Z" fill-rule="evenodd" fill="currentColor"></path>
@@ -267,7 +298,7 @@ if(uri_string()!=""){
                     </div>
                 </div>
             </div>
-            <div class="border-top mt-4 pt-4 text-center" style="border-color: #333 !important; color: #777;">
+            <div class="border-top mt-3 pt-3 text-center" style="border-color: #333 !important; color: #777;">
                 &copy; <?= date('Y') ?> PrajaMukti. All Rights Reserved.
             </div>
         </div>
