@@ -4,6 +4,7 @@
  * @var array<int, array<string, mixed>> $kategori
  * @var array<int, array<string, mixed>> $tags
  * @var array<int, array<string, mixed>> $tempat
+ * @var array<string, string> $quote_api
  * @var mixed $pager
  */
 ?>
