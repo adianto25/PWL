@@ -4,18 +4,11 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link <?php echo (uri_string() == '') ? "" : "collapsed" ?>" href="/">
-                <i class="bi bi-grid"></i>
-                <span>Home</span>
+            <a class="nav-link <?php echo (uri_string() == '' || uri_string() == 'kuliner') ? "" : "collapsed" ?>" href="<?= base_url('/') ?>">
+                <i class="bi bi-shop"></i>
+                <span>Beranda Utama (Eksplorasi)</span>
             </a>
         </li><!-- End Home Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link <?php echo (uri_string() == 'kuliner' || uri_string() == '') ? "" : "collapsed" ?>" href="<?= base_url('kuliner') ?>">
-                <i class="bi bi-shop"></i>
-                <span>Eksplorasi UMKM</span>
-            </a>
-        </li>
 
         <?php if (session()->get('isLoggedIn')): ?>
         <li class="nav-item">
