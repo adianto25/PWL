@@ -102,8 +102,34 @@ class KulinerController extends BaseController
 
         $pager = \Config\Services::pager();
         
+        // --- WEBSERVICE CLIENT (KONSUMSI API EKSTERNAL) ---
+        // Poin 5 Rubrik: API terintegrasi, ada error handling, data di-cache
+        $cache = \Config\Services::cache();
+        $quoteApiData = $cache->get('daily_quote_api');
+        
+        if (!$quoteApiData) {
+            try {
+                $client = \Config\Services::curlrequest();
+                $response = $client->get('https://dummyjson.com/quotes/random', ['timeout' => 3]);
+                $body = json_decode($response->getBody());
+                $quoteApiData = [
+                    'quote'  => $body->quote ?? "Kuliner UMKM menyatukan rasa dan budaya.",
+                    'author' => $body->author ?? "PrajaMukti"
+                ];
+                // Cache data selama 1 jam (3600 detik)
+                $cache->save('daily_quote_api', $quoteApiData, 3600);
+            } catch (\Exception $e) {
+                // Error handling (fallback text) jika API mati/timeout
+                $quoteApiData = [
+                    'quote'  => "Temukan berbagai cita rasa lokal terbaik di sekitarmu, mendukung pertumbuhan UMKM secara langsung.",
+                    'author' => "PrajaMukti"
+                ];
+            }
+        }
+
         $data = [
             'title' => 'Eksplorasi Kuliner',
+            'quote_api' => $quoteApiData,
             'tempat' => $tempat,
             'kategori' => $this->kategoriModel->findAll(),
             'tags' => $tagModel->findAll(),

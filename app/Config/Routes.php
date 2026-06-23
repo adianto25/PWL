@@ -66,5 +66,14 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
     $routes->post('tempat/save', 'AdminController::save_tempat'); // Proses simpan data
 });
 
-// Webservice API
-$routes->get('api/kuliner', 'Api\KulinerController::index');
+// Webservice API - Dokumentasi (Public)
+$routes->get('api/docs', 'Api\KulinerController::docs');
+
+// Webservice API - Endpoint (Protected by API Key)
+$routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
+    $routes->get('kuliner', 'Api\KulinerController::index');
+    $routes->get('kuliner/(:num)', 'Api\KulinerController::show/$1');
+    $routes->post('kuliner', 'Api\KulinerController::create');
+    $routes->put('kuliner/(:num)', 'Api\KulinerController::update/$1');
+    $routes->delete('kuliner/(:num)', 'Api\KulinerController::delete/$1');
+});

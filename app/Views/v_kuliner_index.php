@@ -415,7 +415,10 @@
     <div class="position-relative text-white" style="z-index: 1; padding-top: 80px; max-width: 900px;">
         <h2 class="mb-3" style="font-family: 'Playball', cursive; font-size: clamp(2.5rem, 5vw, 4rem); color: #D4AF37 !important; text-shadow: 2px 2px 8px rgba(0,0,0,0.4); line-height: 1;">Surga UMKM Lokal</h2>
         <h1 class="fw-bold mb-4" style="color: white !important; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); letter-spacing: -1px; font-size: clamp(2.5rem, 6vw, 4.5rem);">Temukan Rasa Terbaik di Sekitarmu</h1>
-        <p class="mb-5 opacity-100" style="color: #e0e0e0 !important; max-width: 750px; margin: 0 auto; font-size: clamp(1.1rem, 2vw, 1.25rem); line-height: 1.7; text-shadow: 1px 1px 4px rgba(0,0,0,0.6);">Eksplorasi ribuan produk UMKM, kerajinan, dan layanan lokal yang direkomendasikan langsung oleh masyarakat.</p>
+        <p class="mb-5 opacity-100" style="color: #e0e0e0 !important; max-width: 750px; margin: 0 auto; font-size: clamp(1.1rem, 2vw, 1.25rem); line-height: 1.7; text-shadow: 1px 1px 4px rgba(0,0,0,0.6);">
+            "<?= esc($quote_api['quote']) ?>"<br>
+            <small style="color: #D4AF37; font-weight: 600;">- <?= esc($quote_api['author']) ?> -</small>
+        </p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
             <a href="#kulinerSection" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold shadow-lg text-uppercase" style="padding-top: 16px; padding-bottom: 16px; letter-spacing: 1px; font-size: 1.1rem;">Eksplor Sekarang <i class="bi bi-arrow-down ms-2"></i></a>
         </div>

@@ -56,4 +56,71 @@ class KulinerController extends ResourceController
             'data' => $data
         ], 200);
     }
+
+    public function show($id = null)
+    {
+        $data = $this->tempatModel->find($id);
+        if ($data) {
+            return $this->respond(['status' => 200, 'message' => 'Berhasil mengambil data', 'data' => $data], 200);
+        }
+        return $this->failNotFound('Data tidak ditemukan');
+    }
+
+    public function create()
+    {
+        $rules = [
+            'nama' => 'required',
+            'alamat' => 'required',
+            'deskripsi' => 'required',
+            'kategori_id' => 'required|numeric',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
+
+        $data = [
+            'nama' => $this->request->getVar('nama'),
+            'alamat' => $this->request->getVar('alamat'),
+            'deskripsi' => $this->request->getVar('deskripsi'),
+            'kategori_id' => $this->request->getVar('kategori_id'),
+            'lat' => $this->request->getVar('lat'),
+            'lng' => $this->request->getVar('lng'),
+            'user_id' => 1, // Default owner untuk API
+            'status' => 'approved' // Auto approve untuk API
+        ];
+
+        $this->tempatModel->insert($data);
+        return $this->respondCreated(['status' => 201, 'message' => 'Data berhasil ditambahkan', 'data' => $data]);
+    }
+
+    public function update($id = null)
+    {
+        $data = $this->request->getRawInput();
+        
+        if (!$this->tempatModel->find($id)) {
+            return $this->failNotFound('Data tidak ditemukan');
+        }
+
+        $this->tempatModel->update($id, $data);
+        return $this->respond(['status' => 200, 'message' => 'Data berhasil diupdate']);
+    }
+
+    public function delete($id = null)
+    {
+        $data = $this->tempatModel->find($id);
+        if ($data) {
+            $this->tempatModel->delete($id);
+            return $this->respondDeleted(['status' => 200, 'message' => 'Data berhasil dihapus']);
+        }
+        return $this->failNotFound('Data tidak ditemukan');
+    }
+
+    public function docs()
+    {
+        // View terpisah untuk dokumentasi endpoint API (Tidak butuh API Key)
+        return view('v_api_docs');
+    }
 }
