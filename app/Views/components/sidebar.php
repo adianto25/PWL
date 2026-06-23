@@ -6,7 +6,7 @@
         <li class="nav-item">
             <a class="nav-link <?php echo (uri_string() == '' || uri_string() == 'kuliner') ? "" : "collapsed" ?>" href="<?= base_url('/') ?>">
                 <i class="bi bi-shop"></i>
-                <span>Beranda Utama (Eksplorasi)</span>
+                <span>Beranda Utama</span>
             </a>
         </li><!-- End Home Nav -->
 
