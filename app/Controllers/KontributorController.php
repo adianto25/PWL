@@ -270,4 +270,22 @@ class KontributorController extends BaseController
         }
         return redirect()->back()->with('error', 'Tempat tidak ditemukan.');
     }
+
+    public function favorit()
+    {
+        $userId = session()->get('user_id');
+        $db = \Config\Database::connect();
+        $builder = $db->table('favorit');
+        $builder->select('tempat_kuliner.*');
+        $builder->join('tempat_kuliner', 'tempat_kuliner.id = favorit.tempat_id');
+        $builder->where('favorit.user_id', $userId);
+        // Only show approved and not permanently closed ones if desired, but let's show all they favorited
+        $favorit_saya = $builder->get()->getResultArray();
+
+        $data = [
+            'title' => 'Favorit Saya',
+            'favorit_saya' => $favorit_saya
+        ];
+        return view('kontributor/v_favorit', $data);
+    }
 }

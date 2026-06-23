@@ -12,11 +12,19 @@
 
         <?php if (session()->get('isLoggedIn')): ?>
         <li class="nav-item">
-            <a class="nav-link <?php echo (strpos(uri_string(), 'kontributor') !== false) ? "" : "collapsed" ?>" href="<?= base_url('kontributor/dashboard') ?>">
+            <a class="nav-link <?php echo (strpos(uri_string(), 'kontributor/dashboard') !== false || uri_string() == 'kontributor/submit') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/dashboard') ?>">
                 <i class="bi bi-person-badge"></i>
                 <span>Panel Kontributor</span>
             </a>
         </li>
+        <?php if (session()->get('role') != 'admin'): ?>
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'kontributor/favorit') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/favorit') ?>">
+                <i class="bi bi-heart"></i>
+                <span>Favorit Saya</span>
+            </a>
+        </li>
+        <?php endif; ?>
         <?php endif; ?>
 
         <?php

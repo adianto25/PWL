@@ -23,6 +23,7 @@ $routes->get('kuliner/detail/(:num)', 'KulinerController::detail/$1');
 // Kontributor (Login Required)
 $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
     $routes->get('dashboard', 'KontributorController::index');
+    $routes->get('favorit', 'KontributorController::favorit');
     $routes->get('submit', 'KontributorController::submit');
     $routes->post('submit', 'KontributorController::processSubmit');
     $routes->get('geocode', 'KontributorController::geocode');
