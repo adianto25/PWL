@@ -7,21 +7,19 @@ $username_attr = [
     'name'        => 'username',
     'id'          => 'username',
     'class'       => 'form-control custom-input border-start-0',
-    'placeholder' => 'Masukkan username',
+    'placeholder' => ' ', /* Wajib spasi kosong untuk floating label */
     'required'    => 'required',
     'minlength'   => '5',
-    'value'       => old('username'), // Menjaga input tidak hilang jika error
-    'style'       => 'border-radius: 0 12px 12px 0;'
+    'value'       => old('username'),
 ];
 
 $password_attr = [
     'name'        => 'password',
     'id'          => 'password',
     'class'       => 'form-control custom-input border-start-0',
-    'placeholder' => '••••••••',
+    'placeholder' => ' ', /* Wajib spasi kosong untuk floating label */
     'required'    => 'required',
     'minlength'   => '7',
-    'style'       => 'border-radius: 0 12px 12px 0;'
 ];
 ?>
 
@@ -75,20 +73,71 @@ $password_attr = [
         color: #165F39;
         margin: 0;
         font-family: 'Poppins', sans-serif;
+    /* Floating Label & Refined Neumorphism */
+    .float-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 35px;
     }
 
-    .custom-input {
-        border-radius: 12px;
-        padding: 12px 15px;
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        transition: all 0.3s;
-        height: auto;
+    .float-container .float-label {
+      font-size: 15px;
+      padding-left: 55px; /* Offset for icon */
+      position: absolute;
+      top: 15px;
+      color: #888;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+      font-weight: 500;
+      margin: 0;
     }
-    .custom-input:focus {
-        background: #fff;
-        border-color: #165F39;
-        box-shadow: 0 0 0 4px rgba(22, 95, 57, 0.1);
+
+    .float-input-wrapper {
+      display: flex;
+      border-radius: 12px;
+      background-color: #f8f9fa;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.06),
+                  -4px -4px 10px rgba(255,255,255,1);
+      transition: all 0.3s;
+    }
+    
+    .float-input-wrapper:focus-within {
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.05), 
+                  inset -4px -4px 8px rgba(255,255,255,1);
+    }
+
+    .float-input-wrapper .input-group-text {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #165F39;
+      padding-left: 20px;
+    }
+
+    .float-input-wrapper .custom-input {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 15px 15px 15px 0; 
+      color: #333;
+      font-size: medium;
+      font-weight: 600;
+    }
+
+    .float-input-wrapper .custom-input:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    /* The floating action */
+    .float-input-wrapper .custom-input:not(:placeholder-shown) ~ .float-label,
+    .float-input-wrapper .custom-input:focus ~ .float-label {
+      padding-left: 5px;
+      transform: translateY(-38px);
+      font-size: 14px;
+      color: #165F39;
+      font-weight: 700;
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
     }
     
     .login-btn {
@@ -131,22 +180,22 @@ $password_attr = [
         <?php endif; ?>
 
         <?= form_open('login', 'class="needs-validation"') ?>
-            <div class="mb-4">
-                <label class="form-label fw-semibold" style="color: #495057; font-size: 0.9rem;">Username</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px; color: #165F39; padding: 0 15px;"><i class="bi bi-person fs-5"></i></span>
+            <div class="float-container">
+                <div class="float-input-wrapper">
+                    <span class="input-group-text"><i class="bi bi-person fs-5"></i></span>
                     <?= form_input($username_attr) ?>
+                    <label class="float-label">Username</label>
                 </div>
-                <div class="invalid-feedback">Username wajib diisi (Min. 5 Karakter)</div>
+                <div class="invalid-feedback" style="position: absolute; bottom: -22px; padding-left: 5px;">Username wajib diisi (Min. 5 Karakter)</div>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold" style="color: #495057; font-size: 0.9rem;">Password</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0" style="border-radius: 12px 0 0 12px; color: #165F39; padding: 0 15px;"><i class="bi bi-lock fs-5"></i></span>
+            <div class="float-container">
+                <div class="float-input-wrapper">
+                    <span class="input-group-text"><i class="bi bi-lock fs-5"></i></span>
                     <?= form_password($password_attr) ?>
+                    <label class="float-label">Password</label>
                 </div>
-                <div class="invalid-feedback">Password wajib diisi (Min. 7 Karakter)</div>
+                <div class="invalid-feedback" style="position: absolute; bottom: -22px; padding-left: 5px;">Password wajib diisi (Min. 7 Karakter)</div>
             </div>
 
             <button type="submit" class="btn w-100 login-btn mt-2">Login Sekarang</button>

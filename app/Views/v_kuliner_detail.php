@@ -122,6 +122,32 @@
         position: sticky;
         top: 100px;
     }
+
+    /* Interactive Star Rating */
+    .star-rating {
+      display: inline-flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+    .star-rating input {
+      display: none;
+    }
+    .star-rating label {
+      cursor: pointer;
+      color: #e4e4e4;
+      transition: color 0.3s;
+      margin-bottom: 0;
+    }
+    .star-rating label:before {
+      content: "\2605";
+      font-size: 35px;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #ffc107;
+      transition: color 0.3s;
+    }
 </style>
 <?= $this->endSection() ?>
 
@@ -288,14 +314,19 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold text-secondary">Rating</label>
-                                        <select name="rating" class="form-select form-select-lg" required style="border-radius: 12px;">
-                                            <option value="5" <?= $r['rating']==5?'selected':'' ?>>★★★★★ (5) - Sangat Bagus</option>
-                                            <option value="4" <?= $r['rating']==4?'selected':'' ?>>★★★★☆ (4) - Bagus</option>
-                                            <option value="3" <?= $r['rating']==3?'selected':'' ?>>★★★☆☆ (3) - Biasa</option>
-                                            <option value="2" <?= $r['rating']==2?'selected':'' ?>>★★☆☆☆ (2) - Kurang</option>
-                                            <option value="1" <?= $r['rating']==1?'selected':'' ?>>★☆☆☆☆ (1) - Sangat Kurang</option>
-                                        </select>
+                                        <label class="form-label fw-bold text-secondary d-block">Rating</label>
+                                        <div class="star-rating">
+                                          <input type="radio" id="star5_<?= $r['id'] ?>" name="rating" value="5" <?= $r['rating']==5?'checked':'' ?> required />
+                                          <label for="star5_<?= $r['id'] ?>" title="5 - Sangat Bagus"></label>
+                                          <input type="radio" id="star4_<?= $r['id'] ?>" name="rating" value="4" <?= $r['rating']==4?'checked':'' ?> />
+                                          <label for="star4_<?= $r['id'] ?>" title="4 - Bagus"></label>
+                                          <input type="radio" id="star3_<?= $r['id'] ?>" name="rating" value="3" <?= $r['rating']==3?'checked':'' ?> />
+                                          <label for="star3_<?= $r['id'] ?>" title="3 - Biasa"></label>
+                                          <input type="radio" id="star2_<?= $r['id'] ?>" name="rating" value="2" <?= $r['rating']==2?'checked':'' ?> />
+                                          <label for="star2_<?= $r['id'] ?>" title="2 - Kurang"></label>
+                                          <input type="radio" id="star1_<?= $r['id'] ?>" name="rating" value="1" <?= $r['rating']==1?'checked':'' ?> />
+                                          <label for="star1_<?= $r['id'] ?>" title="1 - Sangat Kurang"></label>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label fw-bold text-secondary">Ceritakan Pengalamanmu</label>
@@ -320,14 +351,19 @@
                     <h5 class="fw-bold mb-3 text-dark">Bagikan Pengalaman Anda</h5>
                     <form action="<?= base_url('kontributor/review/'.$tempat['id']) ?>" method="POST">
                         <div class="mb-3">
-                            <label class="form-label text-secondary fw-bold small">Pilih Rating</label>
-                            <select name="rating" class="form-select" required style="border-radius: 10px;">
-                                <option value="5">★★★★★ (5) - Sangat Bagus</option>
-                                <option value="4">★★★★☆ (4) - Bagus</option>
-                                <option value="3">★★★☆☆ (3) - Biasa</option>
-                                <option value="2">★★☆☆☆ (2) - Kurang</option>
-                                <option value="1">★☆☆☆☆ (1) - Sangat Kurang</option>
-                            </select>
+                            <label class="form-label text-secondary fw-bold small d-block">Pilih Rating</label>
+                            <div class="star-rating">
+                              <input type="radio" id="new_star5" name="rating" value="5" required />
+                              <label for="new_star5" title="5 - Sangat Bagus"></label>
+                              <input type="radio" id="new_star4" name="rating" value="4" />
+                              <label for="new_star4" title="4 - Bagus"></label>
+                              <input type="radio" id="new_star3" name="rating" value="3" />
+                              <label for="new_star3" title="3 - Biasa"></label>
+                              <input type="radio" id="new_star2" name="rating" value="2" />
+                              <label for="new_star2" title="2 - Kurang"></label>
+                              <input type="radio" id="new_star1" name="rating" value="1" />
+                              <label for="new_star1" title="1 - Sangat Kurang"></label>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-secondary fw-bold small">Ulasan Lengkap</label>
