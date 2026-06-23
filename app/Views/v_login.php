@@ -6,7 +6,7 @@
 $username_attr = [
     'name'        => 'username',
     'id'          => 'username',
-    'class'       => 'form-control custom-input border-start-0',
+    'class'       => 'custom-input',
     'placeholder' => ' ', /* Wajib spasi kosong untuk floating label */
     'required'    => 'required',
     'minlength'   => '5',
@@ -16,7 +16,7 @@ $username_attr = [
 $password_attr = [
     'name'        => 'password',
     'id'          => 'password',
-    'class'       => 'form-control custom-input border-start-0',
+    'class'       => 'custom-input',
     'placeholder' => ' ', /* Wajib spasi kosong untuk floating label */
     'required'    => 'required',
     'minlength'   => '7',
@@ -73,71 +73,68 @@ $password_attr = [
         color: #165F39;
         margin: 0;
         font-family: 'Poppins', sans-serif;
-    /* Floating Label & Refined Neumorphism */
+    }
+
+    /* Floating Label by User */
     .float-container {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
       position: relative;
       width: 100%;
-      margin-bottom: 35px;
+      margin-bottom: 25px;
     }
 
     .float-container .float-label {
       font-size: 15px;
-      padding-left: 55px; /* Offset for icon */
+      padding-left: 15px;
       position: absolute;
-      top: 15px;
-      color: #888;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      top: 13px;
+      transition: 0.3s;
       pointer-events: none;
-      font-weight: 500;
+      color: #666;
       margin: 0;
     }
 
-    .float-input-wrapper {
-      display: flex;
-      border-radius: 12px;
-      background-color: #f8f9fa;
-      box-shadow: 4px 4px 10px rgba(0,0,0,0.06),
-                  -4px -4px 10px rgba(255,255,255,1);
-      transition: all 0.3s;
-    }
-    
-    .float-input-wrapper:focus-within {
-      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.05), 
-                  inset -4px -4px 8px rgba(255,255,255,1);
-    }
-
-    .float-input-wrapper .input-group-text {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      color: #165F39;
-      padding-left: 20px;
-    }
-
-    .float-input-wrapper .custom-input {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      padding: 15px 15px 15px 0; 
+    .custom-input {
+      width: 100%;
+      height: 48px;
+      border: none;
+      outline: none;
+      padding: 0px 15px;
+      border-radius: 8px;
       color: #333;
-      font-size: medium;
+      font-size: 15px;
+      background-color: transparent;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.06),
+                  -1px -1px 6px rgba(255, 255, 255, 1);
+    }
+
+    .custom-input:focus {
+      border: 2px solid transparent;
+      color: #333;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.06),
+                  -1px -1px 6px rgba(255, 255, 255, 1),
+                  inset 3px 3px 10px rgba(0,0,0,0.06),
+                  inset -1px -1px 6px rgba(255, 255, 255, 1);
+    }
+
+    .float-container .custom-input:not(:placeholder-shown) ~ .float-label,
+    .float-container .custom-input:focus ~ .float-label {
+      transition: 0.3s;
+      padding-left: 2px;
+      transform: translateY(-30px);
+      font-size: 13px;
+      color: #165F39;
       font-weight: 600;
     }
 
-    .float-input-wrapper .custom-input:focus {
-      outline: none !important;
-      box-shadow: none !important;
-    }
-
-    /* The floating action */
-    .float-input-wrapper .custom-input:not(:placeholder-shown) ~ .float-label,
-    .float-input-wrapper .custom-input:focus ~ .float-label {
-      padding-left: 5px;
-      transform: translateY(-38px);
-      font-size: 14px;
-      color: #165F39;
-      font-weight: 700;
-      text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+    .float-container .custom-input:not(:placeholder-shown),
+    .float-container .custom-input:focus {
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.06),
+                  -1px -1px 6px rgba(255, 255, 255, 1),
+                  inset 3px 3px 10px rgba(0,0,0,0.06),
+                  inset -1px -1px 6px rgba(255, 255, 255, 1);
     }
     
     .login-btn {
@@ -181,21 +178,15 @@ $password_attr = [
 
         <?= form_open('login', 'class="needs-validation"') ?>
             <div class="float-container">
-                <div class="float-input-wrapper">
-                    <span class="input-group-text"><i class="bi bi-person fs-5"></i></span>
-                    <?= form_input($username_attr) ?>
-                    <label class="float-label">Username</label>
-                </div>
-                <div class="invalid-feedback" style="position: absolute; bottom: -22px; padding-left: 5px;">Username wajib diisi (Min. 5 Karakter)</div>
+                <?= form_input($username_attr) ?>
+                <label class="float-label">Username</label>
+                <div class="invalid-feedback" style="position: absolute; bottom: -20px; padding-left: 5px;">Username wajib diisi (Min. 5 Karakter)</div>
             </div>
 
             <div class="float-container">
-                <div class="float-input-wrapper">
-                    <span class="input-group-text"><i class="bi bi-lock fs-5"></i></span>
-                    <?= form_password($password_attr) ?>
-                    <label class="float-label">Password</label>
-                </div>
-                <div class="invalid-feedback" style="position: absolute; bottom: -22px; padding-left: 5px;">Password wajib diisi (Min. 7 Karakter)</div>
+                <?= form_password($password_attr) ?>
+                <label class="float-label">Password</label>
+                <div class="invalid-feedback" style="position: absolute; bottom: -20px; padding-left: 5px;">Password wajib diisi (Min. 7 Karakter)</div>
             </div>
 
             <button type="submit" class="btn w-100 login-btn mt-2">Login Sekarang</button>
