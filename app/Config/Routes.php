@@ -36,6 +36,7 @@ $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
 
     $routes->post('submit', 'KontributorController::processSubmit');
     $routes->get('geocode', 'KontributorController::geocode');
+    $routes->get('reverse-geocode', 'KontributorController::reverseGeocode');
     $routes->post('review/(:num)', 'KontributorController::postReview/$1');
     $routes->post('review/update/(:num)', 'KontributorController::updateReview/$1');
     $routes->post('favorit/(:num)', 'KontributorController::toggleFavorit/$1');
