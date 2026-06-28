@@ -184,12 +184,32 @@ class KulinerController extends BaseController
         $ratingCounts = array_replace([5=>0, 4=>0, 3=>0, 2=>0, 1=>0], array_count_values(array_column($reviews, 'rating')));
         $totalReviews = count($reviews);
 
+        // Fetch Menus
+        $menus = (new \App\Models\MenuModel())->where('tempat_id', $id)->findAll();
+
+        // Build Review Tree (Parent -> Children)
+        $reviewTree = [];
+        // First pass: get all parents
+        foreach ($reviews as $rev) {
+            if (empty($rev['parent_id'])) {
+                $rev['replies'] = [];
+                $reviewTree[$rev['id']] = $rev;
+            }
+        }
+        // Second pass: attach children
+        foreach ($reviews as $rev) {
+            if (!empty($rev['parent_id']) && isset($reviewTree[$rev['parent_id']])) {
+                $reviewTree[$rev['parent_id']]['replies'][] = $rev;
+            }
+        }
+
         $data = [
             'title' => $tempat['nama'],
             'tempat' => $tempat,
-            'reviews' => $reviews,
+            'reviews' => $reviewTree, // passed tree instead of flat array
             'ratingCounts' => $ratingCounts,
-            'totalReviews' => $totalReviews
+            'totalReviews' => $totalReviews,
+            'menus' => $menus
         ];
 
         return view('v_kuliner_detail', $data);

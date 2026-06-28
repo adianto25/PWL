@@ -25,6 +25,15 @@ $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
     $routes->get('dashboard', 'KontributorController::index');
     $routes->get('favorit', 'KontributorController::favorit');
     $routes->get('submit', 'KontributorController::submit');
+    
+    // Fitur E-commerce & Interaktif
+    $routes->get('keranjang', 'KeranjangController::index');
+    $routes->post('keranjang/add', 'KeranjangController::add');
+    $routes->get('keranjang/delete/(:num)', 'KeranjangController::delete/$1');
+    $routes->get('chat', 'ChatController::index');
+    $routes->get('chat/(:num)', 'ChatController::index/$1');
+    $routes->post('chat/send', 'ChatController::send');
+
     $routes->post('submit', 'KontributorController::processSubmit');
     $routes->get('geocode', 'KontributorController::geocode');
     $routes->post('review/(:num)', 'KontributorController::postReview/$1');

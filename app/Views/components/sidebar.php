@@ -24,7 +24,19 @@
                 <span>Favorit Saya</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link <?php echo (strpos(uri_string(), 'kontributor/chat') !== false) ? "" : "collapsed" ?>" href="<?= base_url('kontributor/chat') ?>">
+                <i class="bi bi-chat-dots"></i>
+                <span>Pesan/Chat</span>
+            </a>
+        </li>
         <?php endif; ?>
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'kontributor/keranjang') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/keranjang') ?>">
+                <i class="bi bi-cart3"></i>
+                <span>Keranjang</span>
+            </a>
+        </li>
         <?php endif; ?>
 
         <?php

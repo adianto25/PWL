@@ -14,6 +14,9 @@ class SemarangKulinerSeeder extends Seeder
         $this->db->table('tempat_tags')->truncate();
         $this->db->table('tempat_fotos')->truncate();
         $this->db->table('favorit')->truncate();
+        $this->db->table('keranjang')->truncate();
+        $this->db->table('menus')->truncate();
+        $this->db->table('chats')->truncate();
         $this->db->table('tempat_kuliner')->truncate();
         $this->db->query('SET FOREIGN_KEY_CHECKS=1');
 
@@ -206,6 +209,20 @@ class SemarangKulinerSeeder extends Seeder
             }
 
             $this->db->table('tempat_tags')->insertBatch($tagsToInsert);
+
+            // Assign Dummy Menus (2-3 menu per tempat)
+            $menuNames = ['Paket Spesial ' . $data['nama'], 'Menu Hemat ' . $data['nama'], 'Es Teh Manis', 'Nasi Putih'];
+            $randomMenuCount = rand(2, 3);
+            for ($m = 0; $m < $randomMenuCount; $m++) {
+                $this->db->table('menus')->insert([
+                    'tempat_id'    => $tempatId,
+                    'nama_makanan' => $menuNames[$m],
+                    'deskripsi'    => 'Sajian lezat dari ' . $data['nama'],
+                    'harga'        => rand(15, 50) * 1000,
+                    'foto'         => null,
+                    'created_at'   => date('Y-m-d H:i:s')
+                ]);
+            }
         }
     }
 }

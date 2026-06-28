@@ -216,6 +216,11 @@
                                         ->countAllResults() > 0;
                     ?>
                     <div class="d-flex gap-2 flex-column flex-sm-row">
+                        <?php if($tempat['user_id'] != session()->get('user_id')): ?>
+                        <a href="<?= base_url('kontributor/chat/'.$tempat['user_id']) ?>" class="btn action-btn btn-primary w-100">
+                            <i class="bi bi-chat-dots-fill"></i> Chat Penjual
+                        </a>
+                        <?php endif; ?>
                         <form action="<?= base_url('kontributor/favorit/'.$tempat['id']) ?>" method="POST">
                             <button type="submit" class="btn action-btn <?= $isFavorit ? 'btn-danger' : 'btn-outline-danger' ?> w-100">
                                 <i class="bi bi-heart<?= $isFavorit ? '-fill' : '' ?>"></i> <?= $isFavorit ? 'Difavoritkan' : 'Favorit' ?>
@@ -242,6 +247,44 @@
             
             <h5 class="fw-bold text-dark mb-3 mt-4">Tentang Tempat Ini</h5>
             <p class="text-secondary" style="line-height: 1.8; font-size: 1.05rem;"><?= nl2br(esc($tempat['deskripsi'])) ?></p>
+        </div>
+
+        <!-- Menu Makanan Section -->
+        <div class="detail-card mb-4">
+            <h4 class="fw-bold mb-4 text-dark"><i class="bi bi-card-list text-primary"></i> Daftar Menu Makanan</h4>
+            <?php if(empty($menus)): ?>
+                <p class="text-muted mb-0">Belum ada menu yang ditambahkan oleh pemilik.</p>
+            <?php else: ?>
+                <div class="row g-3">
+                    <?php foreach($menus as $menu): ?>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light rounded-4 p-3">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1"><?= esc($menu['nama_makanan']) ?></h6>
+                                    <p class="text-muted small mb-2"><?= esc($menu['deskripsi']) ?></p>
+                                    <span class="text-success fw-bold">Rp <?= number_format($menu['harga'], 0, ',', '.') ?></span>
+                                </div>
+                                <div class="text-end">
+                                    <?php if(session()->get('isLoggedIn')): ?>
+                                    <form action="<?= base_url('kontributor/keranjang/add') ?>" method="POST" class="d-flex flex-column align-items-end gap-2">
+                                        <input type="hidden" name="menu_id" value="<?= $menu['id'] ?>">
+                                        <div class="input-group input-group-sm" style="width: 100px;">
+                                            <span class="input-group-text bg-white">Qty</span>
+                                            <input type="number" name="jumlah" class="form-control text-center" value="1" min="1">
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-primary rounded-pill w-100"><i class="bi bi-cart-plus"></i> Tambah</button>
+                                    </form>
+                                    <?php else: ?>
+                                        <a href="<?= base_url('login') ?>" class="btn btn-sm btn-outline-primary rounded-pill">Login untuk Beli</a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
 
         <!-- Reviews Section -->
@@ -284,8 +327,7 @@
                     </div>
                 <?php else: ?>
                     <?php foreach($reviews as $r): ?>
-                    <div class="review-item">
-
+                    <div class="review-item mb-4">
                         <div class="d-flex gap-3">
                             <div class="reviewer-avatar">
                                 <?= strtoupper(substr(esc($r['username']), 0, 1)) ?>
@@ -301,8 +343,11 @@
                                 <p class="mb-2 text-secondary" style="line-height: 1.6;"><?= esc($r['review_text']) ?></p>
                                 
                                 <div class="d-flex gap-3">
+                                    <?php if(session()->get('isLoggedIn')): ?>
+                                        <button type="button" class="btn btn-link text-primary p-0 small fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#replyModal<?= $r['id'] ?>"><i class="bi bi-reply"></i> Balas</button>
+                                    <?php endif; ?>
                                     <?php if(session()->get('user_id') == $r['user_id'] && (time() - strtotime($r['created_at']) <= 86400)): ?>
-                                        <button type="button" class="btn btn-link text-primary p-0 small fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#editReviewModal<?= $r['id'] ?>"><i class="bi bi-pencil"></i> Edit</button>
+                                        <button type="button" class="btn btn-link text-success p-0 small fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#editReviewModal<?= $r['id'] ?>"><i class="bi bi-pencil"></i> Edit</button>
                                     <?php endif; ?>
                                     <?php if(session()->get('role') == 'admin'): ?>
                                         <a href="<?= base_url('admin/review/delete/'.$r['id']) ?>" onclick="return confirm('Hapus ulasan ini?')" class="text-danger small fw-bold text-decoration-none"><i class="bi bi-trash"></i> Hapus</a>
@@ -310,7 +355,52 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Render Replies (Komentar Balasan) -->
+                        <?php if(!empty($r['replies'])): ?>
+                            <div class="ms-5 mt-3 ps-3 border-start border-2 border-primary border-opacity-25">
+                                <?php foreach($r['replies'] as $reply): ?>
+                                    <div class="d-flex gap-3 mb-3">
+                                        <div class="reviewer-avatar bg-secondary text-white" style="width: 35px; height: 35px; font-size: 14px;">
+                                            <?= strtoupper(substr(esc($reply['username']), 0, 1)) ?>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;"><?= esc($reply['username']) ?></h6>
+                                                <span class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-clock"></i> <?= date('d M Y', strtotime($reply['created_at'])) ?></span>
+                                            </div>
+                                            <p class="mb-1 text-secondary small" style="line-height: 1.5;"><?= esc($reply['review_text']) ?></p>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
+
+                    <?php if(session()->get('isLoggedIn')): ?>
+                    <!-- Modal Balas Review -->
+                    <div class="modal fade" id="replyModal<?= $r['id'] ?>" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <form action="<?= base_url('kontributor/review/'.$tempat['id']) ?>" method="POST" class="modal-content border-0 shadow">
+                                <input type="hidden" name="parent_id" value="<?= $r['id'] ?>">
+                                <div class="modal-header border-0 pb-0">
+                                    <h5 class="modal-title fw-bold">Balas Ulasan <?= esc($r['username']) ?></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold text-secondary">Isi Balasan</label>
+                                        <textarea name="review_text" class="form-control" rows="3" required style="border-radius: 12px;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0 pt-0">
+                                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4">Kirim Balasan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <?php endif; ?>
 
                     <?php if(session()->get('user_id') == $r['user_id'] && (time() - strtotime($r['created_at']) <= 86400)): ?>
                     <!-- Modal Edit Review -->
@@ -322,6 +412,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
+                                    <?php if(empty($r['parent_id'])): ?>
                                     <div class="mb-4">
                                         <label class="form-label fw-bold text-secondary d-block">Rating</label>
                                         <div class="star-rating">
@@ -337,6 +428,7 @@
                                           <label for="star1_<?= $r['id'] ?>" title="1 - Sangat Kurang"></label>
                                         </div>
                                     </div>
+                                    <?php endif; ?>
                                     <div class="mb-3">
                                         <label class="form-label fw-bold text-secondary">Ceritakan Pengalamanmu</label>
                                         <textarea name="review_text" class="form-control" rows="4" required style="border-radius: 12px;"><?= esc($r['review_text']) ?></textarea>

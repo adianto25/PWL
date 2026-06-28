@@ -207,18 +207,20 @@ class KontributorController extends BaseController
     public function postReview($tempatId)
     {
         $userId = session()->get('user_id');
-        $rating = $this->request->getPost('rating');
+        $rating = $this->request->getPost('rating'); // Could be null for replies
         $reviewText = $this->request->getPost('review_text');
+        $parentId = $this->request->getPost('parent_id') ?: null;
 
         $this->reviewModel->insert([
             'tempat_id' => $tempatId,
             'user_id' => $userId,
-            'rating' => $rating,
+            'rating' => $rating ?: 5, // Default to 5 if reply doesn't have rating
             'review_text' => $reviewText,
+            'parent_id' => $parentId,
             'created_at' => date('Y-m-d H:i:s')
         ]);
 
-        return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Ulasan/Balasan berhasil ditambahkan.');
     }
 
     public function updateReview($reviewId)

@@ -25,6 +25,24 @@
           </a>
         </li><!-- End Search Icon-->
 
+        <!-- Cart Nav -->
+        <?php if(session()->get('isLoggedIn')): ?>
+        <?php
+            $db = \Config\Database::connect();
+            $userId = session()->get('user_id');
+            // Cart count
+            $cartCount = $db->table('keranjang')->where('user_id', $userId)->selectSum('jumlah')->get()->getRow()->jumlah ?? 0;
+        ?>
+        <li class="nav-item">
+          <a class="nav-link nav-icon" href="<?= base_url('kontributor/keranjang') ?>">
+            <i class="bi bi-cart3"></i>
+            <?php if($cartCount > 0): ?>
+            <span class="badge bg-danger badge-number"><?= $cartCount ?></span>
+            <?php endif; ?>
+          </a>
+        </li><!-- End Cart Nav -->
+        <?php endif; ?>
+
         <li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
@@ -100,71 +118,81 @@
 
         </li><!-- End Notification Nav -->
 
+        <?php if(session()->get('isLoggedIn') && session()->get('role') != 'admin'): ?>
+        <?php
+            // Ambil daftar chat masuk yang belum dibaca (hanya untuk pesan terakhir dari setiap pengirim)
+            $db = \Config\Database::connect();
+            $userId = session()->get('user_id');
+            
+            $builder = $db->table('chats');
+            $builder->select('chats.*, users.username');
+            $builder->join('users', 'users.id = chats.pengirim_id');
+            $builder->where('penerima_id', $userId);
+            $builder->where('is_read', 0);
+            $builder->orderBy('created_at', 'DESC');
+            $unreadChatsAll = $builder->get()->getResultArray();
+            
+            // Filter unique per sender
+            $unreadChats = [];
+            $seenSenders = [];
+            foreach($unreadChatsAll as $c) {
+                if(!in_array($c['pengirim_id'], $seenSenders)) {
+                    $unreadChats[] = $c;
+                    $seenSenders[] = $c['pengirim_id'];
+                }
+            }
+            $unreadCount = count($unreadChatsAll);
+        ?>
         <li class="nav-item dropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
+            <?php if($unreadCount > 0): ?>
+            <span class="badge bg-success badge-number"><?= $unreadCount ?></span>
+            <?php endif; ?>
           </a><!-- End Messages Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
             <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+              Anda punya <?= $unreadCount ?> pesan baru
+              <a href="<?= base_url('kontributor/chat') ?>"><span class="badge rounded-pill bg-primary p-2 ms-2">Lihat semua</span></a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
-            <li class="message-item">
-              <a href="#">
-                <img src="<?= base_url()?>NiceAdmin/assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="<?= base_url()?>NiceAdmin/assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="<?= base_url()?>NiceAdmin/assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
+            <?php if(empty($unreadChats)): ?>
+                <li class="message-item p-3 text-center text-muted small">
+                    Tidak ada pesan baru
+                </li>
+            <?php else: ?>
+                <?php foreach(array_slice($unreadChats, 0, 3) as $uc): ?>
+                <li class="message-item">
+                  <a href="<?= base_url('kontributor/chat/'.$uc['pengirim_id']) ?>">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold; font-size: 1.2rem;">
+                        <?= strtoupper(substr($uc['username'], 0, 1)) ?>
+                    </div>
+                    <div>
+                      <h4><?= esc($uc['username']) ?></h4>
+                      <p><?= esc((strlen($uc['pesan']) > 30) ? substr($uc['pesan'],0,30).'...' : $uc['pesan']) ?></p>
+                      <p><?= date('H:i', strtotime($uc['created_at'])) ?></p>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
             <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
+              <a href="<?= base_url('kontributor/chat') ?>">Tampilkan semua obrolan</a>
             </li>
 
           </ul><!-- End Messages Dropdown Items -->
 
         </li><!-- End Messages Nav -->
+        <?php endif; ?>
 
         <li class="nav-item dropdown pe-3">
 
