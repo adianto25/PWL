@@ -161,7 +161,7 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Fitur Baru: Izinkan klik pada peta untuk menentukan lokasi manual
+    // Fitur Baru: Izinkan klik pada peta untuk menentukan lokasi manual & otomatis reverse geocode alamat
     map.on('click', function(e) {
         var latLng = e.latlng;
         document.getElementById('lat').value = latLng.lat;
@@ -179,6 +179,38 @@
         } else {
             marker = L.marker(latLng, {icon: customIcon}).addTo(map);
         }
+
+        // Tampilkan status pencarian alamat pada textarea
+        var alamatTextarea = document.getElementById('alamat');
+        var originalPlaceholder = alamatTextarea.placeholder;
+        var originalValue = alamatTextarea.value;
+        
+        alamatTextarea.value = '';
+        alamatTextarea.placeholder = 'Sedang mendeteksi alamat lengkap dari koordinat...';
+        alamatTextarea.disabled = true;
+
+        fetch('<?= base_url('kontributor/reverse-geocode') ?>?lat=' + latLng.lat + '&lng=' + latLng.lng)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Reverse Geocode Error:', data.error);
+                    alamatTextarea.placeholder = originalPlaceholder;
+                    alamatTextarea.value = originalValue; // Kembalikan ke nilai sebelumnya jika gagal
+                    alert('Gagal mendeteksi alamat untuk koordinat tersebut. Silakan ketik alamat secara manual.');
+                } else {
+                    alamatTextarea.value = data.alamat;
+                    alamatTextarea.placeholder = originalPlaceholder;
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                alamatTextarea.placeholder = originalPlaceholder;
+                alamatTextarea.value = originalValue; // Kembalikan ke nilai sebelumnya jika gagal
+                alert('Terjadi kesalahan jaringan saat mendeteksi alamat.');
+            })
+            .finally(() => {
+                alamatTextarea.disabled = false;
+            });
     });
 
     document.getElementById('btnCariKoordinat').addEventListener('click', function() {

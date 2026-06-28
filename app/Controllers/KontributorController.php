@@ -204,6 +204,40 @@ class KontributorController extends BaseController
         return $this->response->setJSON(['error' => 'Sistem otomatis kesulitan memetakan alamat ini secara presisi. Mohon KLIK PADA PETA untuk menandai lokasi.']);
     }
 
+    public function reverseGeocode()
+    {
+        $lat = $this->request->getGet('lat');
+        $lng = $this->request->getGet('lng');
+
+        if (!$lat || !$lng) {
+            return $this->response->setJSON(['error' => 'Parameter lat dan lng wajib diisi']);
+        }
+
+        $client = \Config\Services::curlrequest([
+            'headers' => [
+                'User-Agent' => 'KulinerKampusApp/1.0'
+            ]
+        ]);
+
+        $url = 'https://nominatim.openstreetmap.org/reverse?lat=' . urlencode($lat) . '&lon=' . urlencode($lng) . '&format=json&accept-language=id&zoom=18';
+
+        try {
+            $response = $client->request('GET', $url);
+            $body = $response->getBody();
+            $data = json_decode($body, true);
+
+            if (!empty($data) && isset($data['display_name'])) {
+                return $this->response->setJSON([
+                    'alamat' => $data['display_name']
+                ]);
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['error' => 'Gagal menghubungi server geocoding: ' . $e->getMessage()]);
+        }
+
+        return $this->response->setJSON(['error' => 'Alamat tidak ditemukan untuk koordinat tersebut']);
+    }
+
     public function postReview($tempatId)
     {
         $userId = session()->get('user_id');
