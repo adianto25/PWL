@@ -17,20 +17,12 @@
                 <span>Panel Kontributor</span>
             </a>
         </li>
-        <?php if (session()->get('role') != 'admin'): ?>
         <li class="nav-item">
             <a class="nav-link <?php echo (uri_string() == 'kontributor/favorit') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/favorit') ?>">
                 <i class="bi bi-heart"></i>
                 <span>Favorit Saya</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link <?php echo (strpos(uri_string(), 'kontributor/chat') !== false) ? "" : "collapsed" ?>" href="<?= base_url('kontributor/chat') ?>">
-                <i class="bi bi-chat-dots"></i>
-                <span>Pesan/Chat</span>
-            </a>
-        </li>
-        <?php endif; ?>
         <li class="nav-item">
             <a class="nav-link <?php echo (uri_string() == 'kontributor/keranjang') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/keranjang') ?>">
                 <i class="bi bi-cart3"></i>
@@ -64,5 +56,14 @@
         <?php
         }
         ?>
+
+        <?php if (session()->get('isLoggedIn')): ?>
+        <li class="nav-item" style="position: absolute; bottom: 20px; width: calc(100% - 40px);">
+            <a class="nav-link collapsed" href="<?= base_url('logout') ?>">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Keluar</span>
+            </a>
+        </li>
+        <?php endif; ?>
     </ul>
 </aside><!-- End Sidebar-->

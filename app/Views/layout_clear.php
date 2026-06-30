@@ -242,7 +242,7 @@ if(uri_string()!=""){
 	</main><!-- End #main -->
 
     <!-- Footer -->
-    <footer style="background-color: #1a1a1a; color: #e0e0e0; padding: 40px 0 20px; font-size: 14px;">
+    <footer style="background-color: var(--pine-green); color: #e0e0e0; padding: 40px 0 20px; font-size: 14px; border-top: 5px solid var(--gold-accent);">
         <div class="container-fluid px-4 px-lg-5">
             <div class="row g-4">
                 <div class="col-lg-4 mb-3">

@@ -145,6 +145,13 @@ class KontributorController extends BaseController
         $alamatInput = $this->request->getGet('q');
         if (!$alamatInput) return $this->response->setJSON(['error' => 'Alamat kosong']);
 
+        // Check cache
+        $cache = \Config\Services::cache();
+        $cacheKey = 'geocode_' . md5($alamatInput);
+        if ($cachedData = $cache->get($cacheKey)) {
+            return $this->response->setJSON($cachedData);
+        }
+
         // Clean common Indonesian prefixes that confuse Nominatim
         $cleanAlamat = str_ireplace(['jl.', 'jalan', 'kec.', 'kecamatan', 'kab.', 'kabupaten', 'kota', 'provinsi'], '', $alamatInput);
         $cleanAlamat = trim(preg_replace('/\s+/', ' ', $cleanAlamat));
@@ -189,11 +196,13 @@ class KontributorController extends BaseController
                 $data = json_decode($body, true);
                 
                 if (!empty($data) && isset($data[0]['lat'])) {
-                    return $this->response->setJSON([
+                    $result = [
                         'lat' => $data[0]['lat'],
                         'lon' => $data[0]['lon'],
                         'matched_query' => $q
-                    ]);
+                    ];
+                    $cache->save($cacheKey, $result, 86400); // 24 hours
+                    return $this->response->setJSON($result);
                 }
             } catch (\Exception $e) {
                 // If one request fails (e.g. timeout), try the next one
@@ -213,6 +222,12 @@ class KontributorController extends BaseController
             return $this->response->setJSON(['error' => 'Parameter lat dan lng wajib diisi']);
         }
 
+        $cache = \Config\Services::cache();
+        $cacheKey = 'revgeo_' . md5($lat . '_' . $lng);
+        if ($cachedData = $cache->get($cacheKey)) {
+            return $this->response->setJSON($cachedData);
+        }
+
         $client = \Config\Services::curlrequest([
             'headers' => [
                 'User-Agent' => 'KulinerKampusApp/1.0'
@@ -227,9 +242,9 @@ class KontributorController extends BaseController
             $data = json_decode($body, true);
 
             if (!empty($data) && isset($data['display_name'])) {
-                return $this->response->setJSON([
-                    'alamat' => $data['display_name']
-                ]);
+                $result = ['alamat' => $data['display_name']];
+                $cache->save($cacheKey, $result, 86400); // 24 hours
+                return $this->response->setJSON($result);
             }
         } catch (\Exception $e) {
             return $this->response->setJSON(['error' => 'Gagal menghubungi server geocoding: ' . $e->getMessage()]);
