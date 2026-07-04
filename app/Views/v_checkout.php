@@ -51,8 +51,8 @@
         snap.pay('<?= $snapToken ?>', {
             // Optional
             onSuccess: function(result){
-                alert("Pembayaran Sukses!");
-                window.location.href = "<?= base_url('kontributor/keranjang') ?>"; // Redirect to a success page later
+                // Langsung redirect ke fungsi cek status otomatis
+                window.location.href = "<?= base_url('kontributor/checkout/status/' . $orderId) ?>";
             },
             // Optional
             onPending: function(result){
