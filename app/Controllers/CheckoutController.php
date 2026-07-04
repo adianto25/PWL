@@ -171,4 +171,36 @@ class CheckoutController extends BaseController
 
         return $this->response->setJSON(['status' => 'success']);
     }
+
+    // Fungsi tambahan khusus karena berjalan di Localhost (Webhook dari Midtrans tidak bisa masuk ke localhost)
+    public function checkStatus($orderId)
+    {
+        $midtransConfig = new \Config\Midtrans();
+        \Midtrans\Config::$serverKey = $midtransConfig->serverKey;
+        \Midtrans\Config::$isProduction = $midtransConfig->isProduction;
+        
+        try {
+            $statusResponse = \Midtrans\Transaction::status($orderId);
+            
+            $db = \Config\Database::connect();
+            $status = 'pending';
+            
+            if ($statusResponse->transaction_status == 'capture') {
+                $status = 'success';
+            } else if ($statusResponse->transaction_status == 'settlement') {
+                $status = 'success';
+            } else if ($statusResponse->transaction_status == 'cancel' || $statusResponse->transaction_status == 'deny' || $statusResponse->transaction_status == 'expire') {
+                $status = 'failed';
+            }
+            
+            $db->table('transaksi')->where('order_id', $orderId)->update([
+                'transaction_status' => $status,
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+            
+            return redirect()->to('/kontributor/dashboard')->with('success', 'Status transaksi ' . $orderId . ' berhasil diupdate menjadi: ' . $status);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', 'Gagal mengecek status: ' . $e->getMessage());
+        }
+    }
 }

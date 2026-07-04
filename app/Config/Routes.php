@@ -43,6 +43,7 @@ $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
     $routes->post('tutup/(:num)', 'KontributorController::tandaiTutup/$1');
     // Checkout & Payment
     $routes->get('checkout', 'CheckoutController::process');
+    $routes->get('checkout/status/(:segment)', 'CheckoutController::checkStatus/$1');
 });
 
 // Admin (Admin Login Required)
