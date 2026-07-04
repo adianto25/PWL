@@ -38,8 +38,18 @@
                         <div class="card-body py-3">
                             <?php foreach($t['details'] as $detail): ?>
                             <div class="d-flex align-items-center mb-3">
-                                <?php if(isset($detail['foto']) && $detail['foto']): ?>
-                                    <img src="<?= base_url('uploads/'.$detail['foto']) ?>" class="rounded-3 me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                <?php 
+                                $fotoMenu = null;
+                                if(isset($detail['foto']) && $detail['foto'] && $detail['foto'] != '') {
+                                    $fotoMenu = base_url('uploads/'.$detail['foto']);
+                                } else if(isset($t['foto_warung']) && $t['foto_warung']) {
+                                    // Fallback ke foto profil warung jika makanan tidak ada fotonya
+                                    $fotoMenu = base_url('uploads/'.$t['foto_warung']);
+                                }
+                                ?>
+                                
+                                <?php if($fotoMenu): ?>
+                                    <img src="<?= $fotoMenu ?>" class="rounded-3 me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                 <?php else: ?>
                                     <div class="bg-light rounded-3 me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                         <i class="bi bi-image text-muted fs-4"></i>
