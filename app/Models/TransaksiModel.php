@@ -24,7 +24,7 @@ class TransaksiModel extends Model
     // Mendapatkan riwayat transaksi user beserta nama tempatnya
     public function getRiwayatByUser($userId)
     {
-        return $this->select('transaksi.*, tempat_kuliner.nama as nama_warung, (SELECT foto_path FROM tempat_foto WHERE tempat_id = transaksi.tempat_id LIMIT 1) as foto_warung')
+        return $this->select('transaksi.*, tempat_kuliner.nama as nama_warung, (SELECT foto_path FROM tempat_fotos WHERE tempat_id = transaksi.tempat_id LIMIT 1) as foto_warung')
                     ->join('tempat_kuliner', 'tempat_kuliner.id = transaksi.tempat_id', 'left')
                     ->where('transaksi.user_id', $userId)
                     ->orderBy('created_at', 'DESC')
@@ -34,7 +34,7 @@ class TransaksiModel extends Model
     // Mendapatkan semua transaksi untuk panel Admin
     public function getAllTransaksi()
     {
-        return $this->select('transaksi.*, users.username, tempat_kuliner.nama as nama_warung, (SELECT foto_path FROM tempat_foto WHERE tempat_id = transaksi.tempat_id LIMIT 1) as foto_warung')
+        return $this->select('transaksi.*, users.username, tempat_kuliner.nama as nama_warung, (SELECT foto_path FROM tempat_fotos WHERE tempat_id = transaksi.tempat_id LIMIT 1) as foto_warung')
                     ->join('users', 'users.id = transaksi.user_id')
                     ->join('tempat_kuliner', 'tempat_kuliner.id = transaksi.tempat_id', 'left')
                     ->orderBy('created_at', 'DESC')
