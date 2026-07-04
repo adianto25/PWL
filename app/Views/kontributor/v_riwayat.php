@@ -41,10 +41,11 @@
                                 <?php 
                                 $fotoMenu = null;
                                 if(isset($detail['foto']) && $detail['foto'] && $detail['foto'] != '') {
-                                    $fotoMenu = base_url('uploads/'.$detail['foto']);
+                                    // Menu photo (usually in uploads)
+                                    $fotoMenu = (strpos($detail['foto'], 'NiceAdmin') !== false) ? base_url($detail['foto']) : base_url('uploads/'.$detail['foto']);
                                 } else if(isset($t['foto_warung']) && $t['foto_warung']) {
-                                    // Fallback ke foto profil warung jika makanan tidak ada fotonya
-                                    $fotoMenu = base_url('uploads/'.$t['foto_warung']);
+                                    // Fallback ke foto profil warung
+                                    $fotoMenu = (strpos($t['foto_warung'], 'NiceAdmin') !== false) ? base_url($t['foto_warung']) : base_url('uploads/'.$t['foto_warung']);
                                 }
                                 ?>
                                 
