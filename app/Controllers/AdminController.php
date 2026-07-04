@@ -422,4 +422,26 @@ class AdminController extends BaseController
         }
         return redirect()->back()->with('error', 'Gagal menghapus ulasan.');
     }
+
+    // ==========================================
+    // MANAJEMEN TRANSAKSI
+    // ==========================================
+    public function transaksi()
+    {
+        $transaksiModel = new \App\Models\TransaksiModel();
+        $detailModel = new \App\Models\TransaksiDetailModel();
+
+        $semuaTransaksi = $transaksiModel->getAllTransaksi();
+        
+        foreach ($semuaTransaksi as &$t) {
+            $t['details'] = $detailModel->getDetailByTransaksi($t['id']);
+        }
+
+        $data = [
+            'title' => 'Data Transaksi',
+            'transaksi' => $semuaTransaksi
+        ];
+
+        return view('admin/v_transaksi', $data);
+    }
 }

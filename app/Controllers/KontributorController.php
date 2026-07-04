@@ -340,4 +340,25 @@ class KontributorController extends BaseController
         ];
         return view('kontributor/v_favorit', $data);
     }
+
+    public function riwayat()
+    {
+        $userId = session()->get('user_id');
+        $transaksiModel = new \App\Models\TransaksiModel();
+        $detailModel = new \App\Models\TransaksiDetailModel();
+
+        $transaksi = $transaksiModel->getRiwayatByUser($userId);
+        
+        // Ambil detail untuk setiap transaksi
+        foreach ($transaksi as &$t) {
+            $t['details'] = $detailModel->getDetailByTransaksi($t['id']);
+        }
+
+        $data = [
+            'title' => 'Riwayat Pembelian',
+            'riwayat' => $transaksi
+        ];
+
+        return view('kontributor/v_riwayat', $data);
+    }
 }
