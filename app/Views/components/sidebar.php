@@ -35,6 +35,12 @@
                 <span>Riwayat Pembelian</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'kontributor/pesanan-masuk') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/pesanan-masuk') ?>">
+                <i class="bi bi-shop"></i>
+                <span>Pesanan Masuk</span>
+            </a>
+        </li>
         <?php endif; ?>
 
         <?php

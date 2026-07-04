@@ -40,4 +40,14 @@ class TransaksiModel extends Model
                     ->orderBy('created_at', 'DESC')
                     ->findAll();
     }
+    // Mendapatkan pesanan masuk untuk Penjual (Pemilik UMKM)
+    public function getPesananMasukByUser($ownerId)
+    {
+        return $this->select('transaksi.*, users.username as nama_pembeli, tempat_kuliner.nama as nama_warung')
+                    ->join('tempat_kuliner', 'tempat_kuliner.id = transaksi.tempat_id')
+                    ->join('users', 'users.id = transaksi.user_id')
+                    ->where('tempat_kuliner.user_id', $ownerId)
+                    ->orderBy('transaksi.created_at', 'DESC')
+                    ->findAll();
+    }
 }

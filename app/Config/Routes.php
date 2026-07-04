@@ -45,6 +45,7 @@ $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
     $routes->get('checkout', 'CheckoutController::process');
     $routes->get('checkout/status/(:segment)', 'CheckoutController::checkStatus/$1');
     $routes->get('riwayat', 'KontributorController::riwayat');
+    $routes->get('pesanan-masuk', 'KontributorController::pesananMasuk');
 });
 
 // Admin (Admin Login Required)
