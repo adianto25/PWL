@@ -44,6 +44,7 @@ $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
     // Checkout & Payment
     $routes->get('checkout', 'CheckoutController::process');
     $routes->get('checkout/status/(:segment)', 'CheckoutController::checkStatus/$1');
+    $routes->get('riwayat', 'KontributorController::riwayat');
 });
 
 // Admin (Admin Login Required)
@@ -51,6 +52,7 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
     $routes->get('/', 'AdminController::index');
     $routes->post('approve/(:num)', 'AdminController::approve/$1');
     $routes->post('reject/(:num)', 'AdminController::reject/$1');
+    $routes->get('transaksi', 'AdminController::transaksi');
 
     // Kategori CRUD
     $routes->get('kategori', 'AdminController::kategori');

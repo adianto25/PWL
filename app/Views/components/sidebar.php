@@ -29,6 +29,12 @@
                 <span>Keranjang</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'kontributor/riwayat') ? "" : "collapsed" ?>" href="<?= base_url('kontributor/riwayat') ?>">
+                <i class="bi bi-receipt"></i>
+                <span>Riwayat Pembelian</span>
+            </a>
+        </li>
         <?php endif; ?>
 
         <?php
@@ -39,6 +45,12 @@
             <a class="nav-link <?php echo (uri_string() == 'admin') ? "" : "collapsed" ?>" href="<?= base_url('admin') ?>">
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard UMKM</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'admin/transaksi') ? "" : "collapsed" ?>" href="<?= base_url('admin/transaksi') ?>">
+                <i class="bi bi-wallet2"></i>
+                <span>Data Transaksi</span>
             </a>
         </li>
         <li class="nav-item">
