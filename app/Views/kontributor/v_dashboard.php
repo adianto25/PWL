@@ -154,6 +154,7 @@
         margin-bottom: 15px;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -203,11 +204,11 @@
     </div>
     <div class="personal-stats">
         <div class="stat-pill">
-            <h3><?= count($tempat_saya) ?></h3>
+            <h3><?= count($tempat_saya ?? []) ?></h3>
             <span>Kontribusi</span>
         </div>
         <div class="stat-pill">
-            <h3><?= esc($total_review) ?></h3>
+            <h3><?= esc((string) ($total_review ?? 0)) ?></h3>
             <span>Ulasan</span>
         </div>
     </div>
@@ -225,7 +226,7 @@
 
 <!-- CARD GRID LAYOUT (Replacing the Table) -->
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
-    <?php if(empty($tempat_saya)): ?>
+    <?php if(empty($tempat_saya ?? [])): ?>
         <div class="col-12 w-100 text-center py-5">
             <div class="p-5 bg-white rounded-4 shadow-sm border border-light">
                 <i class="bi bi-camera fs-1 text-muted d-block mb-3"></i>
@@ -235,7 +236,7 @@
             </div>
         </div>
     <?php else: ?>
-        <?php foreach($tempat_saya as $t): ?>
+        <?php foreach(($tempat_saya ?? []) as $t): ?>
         <div class="col">
             <div class="kontributor-card">
                 <div class="k-card-header">

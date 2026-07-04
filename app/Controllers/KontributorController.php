@@ -15,6 +15,8 @@ class KontributorController extends BaseController
     protected $fotoModel;
     protected $kategoriModel;
     protected $reviewModel;
+    protected $tagModel;
+    protected $tempatTagModel;
 
     public function __construct()
     {
