@@ -9,7 +9,7 @@ class CheckoutController extends BaseController
 {
     public function process()
     {
-        $userId = session()->get('id');
+        $userId = session()->get('user_id');
         if (!$userId) return redirect()->to('/login');
 
         $keranjangModel = new KeranjangModel();
