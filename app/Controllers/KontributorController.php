@@ -361,25 +361,4 @@ class KontributorController extends BaseController
 
         return view('kontributor/v_riwayat', $data);
     }
-
-    public function pesananMasuk()
-    {
-        $userId = session()->get('user_id');
-        $transaksiModel = new \App\Models\TransaksiModel();
-        $detailModel = new \App\Models\TransaksiDetailModel();
-
-        // Ambil transaksi yang tempat_id nya milik user ini
-        $pesanan = $transaksiModel->getPesananMasukByUser($userId);
-        
-        foreach ($pesanan as &$p) {
-            $p['details'] = $detailModel->getDetailByTransaksi($p['id']);
-        }
-
-        $data = [
-            'title' => 'Pesanan Masuk',
-            'transaksi' => $pesanan
-        ];
-
-        return view('kontributor/v_pesanan_masuk', $data);
-    }
 }
