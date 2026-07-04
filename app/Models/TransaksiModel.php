@@ -26,7 +26,7 @@ class TransaksiModel extends Model
     {
         return $this->select('transaksi.*, tempat_kuliner.nama as nama_warung')
                     ->join('tempat_kuliner', 'tempat_kuliner.id = transaksi.tempat_id', 'left')
-                    ->where('user_id', $userId)
+                    ->where('transaksi.user_id', $userId)
                     ->orderBy('created_at', 'DESC')
                     ->findAll();
     }
