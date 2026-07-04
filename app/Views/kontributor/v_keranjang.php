@@ -50,7 +50,7 @@
                         <span class="fw-bold fs-5 text-dark">Rp <?= number_format($totalBelanja, 0, ',', '.') ?></span>
                     </div>
                     <hr>
-                    <button class="btn btn-primary w-100 rounded-pill py-2 fw-bold" onclick="alert('Fitur Checkout akan segera hadir!')"><i class="bi bi-bag-check"></i> Lanjut Checkout</button>
+                    <a href="<?= base_url('kontributor/checkout') ?>" class="btn btn-primary w-100 rounded-pill py-2 fw-bold"><i class="bi bi-bag-check"></i> Lanjut Checkout</a>
                 </div>
             </div>
         </div>

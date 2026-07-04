@@ -41,6 +41,8 @@ $routes->group('kontributor', ['filter' => 'auth'], static function ($routes) {
     $routes->post('review/update/(:num)', 'KontributorController::updateReview/$1');
     $routes->post('favorit/(:num)', 'KontributorController::toggleFavorit/$1');
     $routes->post('tutup/(:num)', 'KontributorController::tandaiTutup/$1');
+    // Checkout & Payment
+    $routes->get('checkout', 'CheckoutController::process');
 });
 
 // Admin (Admin Login Required)
@@ -80,6 +82,9 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
 // Webservice API - Dokumentasi (Public)
 $routes->get('api/docs', 'Api\KulinerController::docs');
 
+// Midtrans Webhook Callback (Public)
+$routes->post('api/midtrans-callback', 'CheckoutController::notification');
+
 // Webservice API - Endpoint (Protected by API Key)
 $routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
     $routes->get('kuliner', 'Api\KulinerController::index');
@@ -88,3 +93,4 @@ $routes->group('api', ['filter' => 'api_auth'], static function ($routes) {
     $routes->put('kuliner/(:num)', 'Api\KulinerController::update/$1');
     $routes->delete('kuliner/(:num)', 'Api\KulinerController::delete/$1');
 });
+
