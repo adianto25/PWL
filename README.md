@@ -112,30 +112,30 @@ Struktur relasi antar tabel (Database Normalization 3NF) dalam sistem ini:
 
 ```mermaid
 erDiagram
-    USERS ||--o{ TEMPAT_KULINER : "memiliki / mendaftarkan"
-    USERS ||--o{ REVIEWS : "menulis"
-    USERS ||--o{ FAVORIT : "menyukai"
-    USERS ||--o{ TRANSAKSI : "melakukan (sebagai pembeli)"
+    USERS ||--o{ TEMPAT_KULINER : mendaftarkan
+    USERS ||--o{ REVIEWS : menulis
+    USERS ||--o{ FAVORIT : menyukai
+    USERS ||--o{ TRANSAKSI : melakukan
 
-    KATEGORI ||--o{ TEMPAT_KULINER : "dimiliki oleh"
+    KATEGORI ||--o{ TEMPAT_KULINER : memiliki
     
-    TEMPAT_KULINER ||--o{ TEMPAT_FOTOS : "mempunyai"
-    TEMPAT_KULINER ||--o{ TEMPAT_TAGS : "ditandai"
-    TEMPAT_KULINER ||--o{ MENUS : "menjual"
-    TEMPAT_KULINER ||--o{ REVIEWS : "dikomentari"
-    TEMPAT_KULINER ||--o{ FAVORIT : "difavoritkan"
-    TEMPAT_KULINER ||--o{ TRANSAKSI : "menerima pesanan"
+    TEMPAT_KULINER ||--o{ TEMPAT_FOTOS : mempunyai
+    TEMPAT_KULINER ||--o{ TEMPAT_TAGS : ditandai
+    TEMPAT_KULINER ||--o{ MENUS : menjual
+    TEMPAT_KULINER ||--o{ REVIEWS : dikomentari
+    TEMPAT_KULINER ||--o{ FAVORIT : difavoritkan
+    TEMPAT_KULINER ||--o{ TRANSAKSI : menerima
 
-    TAGS ||--o{ TEMPAT_TAGS : "merujuk"
+    TAGS ||--o{ TEMPAT_TAGS : merujuk
 
-    TRANSAKSI ||--o{ TRANSAKSI_DETAIL : "memiliki rincian"
-    MENUS ||--o{ TRANSAKSI_DETAIL : "termasuk dalam"
+    TRANSAKSI ||--o{ TRANSAKSI_DETAIL : rincian
+    MENUS ||--o{ TRANSAKSI_DETAIL : termasuk
 
     USERS {
         int id PK
         string username
         string password
-        string role "admin / user"
+        string role
     }
     
     TEMPAT_KULINER {
