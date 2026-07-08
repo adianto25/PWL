@@ -8,15 +8,15 @@
     }
     
     /* Neutralize default layout.php card wrapper */
-    main#main .section > .row > .col-lg-12 > .card {
+    .section .card {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
     }
-    main#main .section > .row > .col-lg-12 > .card > .card-body {
+    .section .card > .card-body {
         padding: 0 !important;
     }
-    main#main .section > .row > .col-lg-12 > .card > .card-body > .card-title {
+    .section .card > .card-body > .card-title {
         display: none !important;
     }
 

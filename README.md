@@ -40,7 +40,7 @@ Berikut adalah langkah-langkah untuk menjalankan aplikasi ini di komputer lokal 
    ```
 
 3. **Konfigurasi Environment (.env)**
-   - Gandakan/ubah nama file `env` bawaan CI4 menjadi `.env`.
+   - Gandakan/ubah nama file `.env.example` bawaan menjadi `.env`.
    - Buka file `.env` dan atur mode environment:
      ```env
      CI_ENVIRONMENT = development
@@ -56,12 +56,12 @@ Berikut adalah langkah-langkah untuk menjalankan aplikasi ini di komputer lokal 
    - (Opsional) Atur *ServerKey* dan *ClientKey* Midtrans jika ingin menguji pembayaran.
 
 4. **Migrasi Database & Seeding**
-   Buat database kosong bernama `db_nanang` di phpMyAdmin, kemudian jalankan perintah ini di terminal untuk merancang otomatis tabel-tabelnya beserta data palsu (dummy):
+   Buat database kosong bernama `db_nanang` di phpMyAdmin.
+   Berdasarkan standar CodeIgniter 4, *migration* dan *seeder* dijalankan dengan dua perintah berikut secara berurutan (ekuivalen dengan `php spark migrate --seed` di framework lain):
    ```bash
    php spark migrate
    php spark db:seed MainSeeder
    ```
-   *(Catatan: Anda juga bisa mengimpor file SQL manual jika tersedia).*
 
 5. **Jalankan Aplikasi**
    Setelah semua siap, jalankan *development server*:
@@ -69,6 +69,40 @@ Berikut adalah langkah-langkah untuk menjalankan aplikasi ini di komputer lokal 
    php spark serve
    ```
    Aplikasi dapat diakses melalui browser di: **http://localhost:8080**
+
+---
+
+## 🔐 Akun Demo
+
+Untuk memudahkan pengujian (sesuai spesifikasi project), berikut adalah akun demo yang dapat digunakan:
+
+| Role | Username / Email | Password | Keterangan |
+| :--- | :--- | :--- | :--- |
+| **Admin** | admin | 123456 | Memiliki akses penuh ke panel admin, moderasi, dan data transaksi keseluruhan. |
+| **User/Kontributor** | nanang | 123456 | Dapat memesan makanan (checkout), melihat riwayat pembelian, dan mendaftarkan UMKM. |
+| **User/Kontributor** | rudi | 123456 | Akun kontributor alternatif. |
+
+---
+
+## 📸 Screenshot Fitur Utama
+
+Berikut adalah gambaran fitur-fitur utama di dalam aplikasi:
+
+1. **Halaman Beranda & Peta Kuliner**
+   Menampilkan daftar tempat kuliner dengan peta interaktif terintegrasi Leaflet.js.
+   *(Tambahkan screenshot beranda di sini)*
+   
+2. **Detail & Pemesanan Makanan (Keranjang)**
+   Pengguna dapat melihat detail UMKM, menu makanan, dan menambahkannya ke keranjang.
+   *(Tambahkan screenshot keranjang/detail di sini)*
+
+3. **Checkout & Midtrans Payment Gateway**
+   Proses pembayaran E-Commerce menggunakan pop-up Midtrans (Sandbox).
+   *(Tambahkan screenshot midtrans di sini)*
+
+4. **Dashboard Admin**
+   Manajemen tempat kuliner, kategori, tag, dan data transaksi seluruh pengguna.
+   *(Tambahkan screenshot admin di sini)*
 
 ---
 
