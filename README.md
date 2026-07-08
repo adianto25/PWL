@@ -167,5 +167,20 @@ erDiagram
 ```
 
 ---
+## hasil demo fitur utama
+![Halaman Utama-1](HalamanUtama-1.png)
+![Halaman Utama-2](HalamanUtama-2.png)
+![Halaman Utama-3](HalamanUtama-3.png)
+Dari ketiga gambar diatas merupakan tampilan awal dari halaman website ini
+![Tampilan Checkout](tampilan-checkout.png)
+Pada gambar diatas merupakan tampilan dari user telah melakukan checkout dan akan masuk ke dalam keranjang
+![Popup-Payment](popup-payment.png)
+Pada gambar diatas merupakan tampilan ketika user akan melakukan pembayaran maka akan menampilkan popup pilihan untuk membayar menggunakan pembayarn apa
+![Pembayaran-Berhasil](pembayarn-berhasil.png)
+Pada gambar diatas merupakan tampilan ketika user sudah berhasil melakukan pembayaran
 
+![Reverse Geocoding](Reverse-Geocoding.png)
+Gambar berikut menunjukkan fitur pencarian lokasi yang mendukung dua arah (two-way conversion), yaitu:
+Reverse Geocoding: Ketika pengguna mengklik suatu titik pada peta, sistem secara otomatis mengambil koordinat (latitude dan longitude) kemudian mengubahnya menjadi alamat yang sesuai. Alamat tersebut akan langsung ditampilkan pada kolom alamat.
+Forward Geocoding: Sebaliknya, ketika pengguna memasukkan alamat pada kolom pencarian, sistem akan mencari koordinat (latitude dan longitude) dari alamat tersebut. Setelah koordinat diperoleh, marker akan berpindah ke lokasi yang sesuai pada peta.
 *Dibuat untuk memenuhi Tugas Akhir / Proyek Mata Kuliah Pemrograman Web Lanjut.*
