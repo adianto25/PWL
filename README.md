@@ -78,9 +78,8 @@ Untuk memudahkan pengujian (sesuai spesifikasi project), berikut adalah akun dem
 
 | Role | Username / Email | Password | Keterangan |
 | :--- | :--- | :--- | :--- |
-| **Admin** | admin | 123456 | Memiliki akses penuh ke panel admin, moderasi, dan data transaksi keseluruhan. |
-| **User/Kontributor** | nanang | 123456 | Dapat memesan makanan (checkout), melihat riwayat pembelian, dan mendaftarkan UMKM. |
-| **User/Kontributor** | rudi | 123456 | Akun kontributor alternatif. |
+| **Admin** | april | 1234567 | Memiliki akses penuh ke panel admin, moderasi, dan data transaksi keseluruhan. |
+| **User/Kontributor** | user1 | 1234567 | Dapat memesan makanan (checkout), melihat riwayat pembelian, dan mendaftarkan UMKM. |
 
 ---
 
